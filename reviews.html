@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews — RS|LENDING</title>
+<meta name="description" content="Client reviews for Richard Bigelow and Steven Wright — RS Lending, powered by Movement Mortgage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:48px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:920px; margin:0 auto; position:relative;}
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .back{display:inline-block; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:2px; margin-bottom:26px;}
+  .back:hover{color:var(--gold);}
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(38px,7vw,72px); letter-spacing:4px; line-height:1.02;}
+  .rule{height:1px; background:var(--gold-dim); margin:22px 0 30px;}
+  .sub{color:var(--muted); font-weight:300; font-size:15px; line-height:1.6; max-width:620px; margin-bottom:28px;}
+  .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:18px;}
+
+  .agg-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px; margin-bottom:36px;}
+  .agg-card{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:26px;}
+  .agg-name{font-weight:300; font-size:24px; letter-spacing:1px; margin-bottom:2px;}
+  .agg-title{color:var(--muted); font-size:12px; letter-spacing:2px; margin-bottom:18px;}
+  .score-row{display:flex; align-items:baseline; gap:12px; margin-bottom:4px; flex-wrap:wrap;}
+  .score{color:var(--gold); font-size:52px; font-weight:300; line-height:1;}
+  .stars{color:var(--gold); font-size:20px; letter-spacing:3px;}
+  .score-src{color:var(--muted); font-size:12px; letter-spacing:1px; margin-bottom:14px;}
+  .gog-row{color:var(--muted); font-size:13px; margin-bottom:16px;}
+  .gog-row b{color:var(--fg); font-weight:500;}
+  .agg-links{display:flex; gap:10px; flex-wrap:wrap;}
+  .agg-links a{
+    display:inline-block; text-decoration:none; font-size:11.5px; letter-spacing:1.5px; font-weight:500;
+    padding:10px 16px; border-radius:999px; border:1px solid var(--gold-dim); color:var(--gold);
+    transition:border-color .15s, transform .15s;
+  }
+  .agg-links a:hover{border-color:var(--gold); transform:translateY(-2px);}
+
+  .quotes{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px;}
+  .qcard{background:var(--card); border:1px solid var(--hairline); border-radius:16px; padding:22px; break-inside:avoid;}
+  .qstars{color:var(--gold); font-size:14px; letter-spacing:2px; margin-bottom:10px;}
+  .qbody{font-weight:300; font-size:14px; line-height:1.65; color:var(--fg); margin-bottom:14px;}
+  .qmeta{color:var(--muted); font-size:11.5px; letter-spacing:1.5px;}
+  .qmeta b{color:var(--gold); font-weight:500;}
+  .status{color:var(--muted); font-size:13px; font-weight:300; padding:14px 0;}
+
+  .cta{margin-top:36px; text-align:center;}
+  .apply-btn{display:inline-block; background:var(--gold); color:#111; text-decoration:none; font-weight:500;
+    font-size:13px; letter-spacing:2px; padding:15px 30px; border-radius:999px; transition:transform .15s, background .15s;}
+  .apply-btn:hover{transform:translateY(-2px); background:#e2b98a;}
+
+  .footer{text-align:center; margin-top:56px;}
+  .lockup{display:inline-flex; align-items:center; gap:14px; margin-bottom:14px;}
+  .rs-box{border:2px solid #b9b9b9; color:#b9b9b9; font-weight:300; font-size:24px; padding:6px 14px;}
+  .lend{color:#b9b9b9; font-weight:300; font-size:24px; letter-spacing:6px;}
+  .powered{color:#828282; font-size:12px; letter-spacing:3px; margin-bottom:14px;}
+  .lic{color:#828282; font-size:11.5px; letter-spacing:1px; line-height:2; margin-bottom:16px;}
+  .lic a{color:#a8a8a8;}
+  .lic a:hover{color:var(--gold);}
+  .disc{color:#606060; font-size:10px; letter-spacing:1.5px; line-height:1.9; max-width:760px; margin:0 auto;}
+
+  @media(max-width:600px){
+    body{padding:36px 14px 60px;}
+    .score{font-size:42px;}
+    .agg-card{padding:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <a class="back" href="/">← RS|LENDING HOME</a>
+
+  <div class="ticker"><span>REVIEWS</span><span class="line"></span><span>THE REAL EXPERIENCE</span></div>
+  <h1>CLIENTS SAY<br>IT BEST</h1>
+  <div class="rule"></div>
+  <p class="sub">Hundreds of five-star experiences across Experience.com and Google — updated automatically as new reviews come in.</p>
+
+  <div class="agg-grid">
+    <div class="agg-card">
+      <div class="agg-name">Richard Bigelow</div>
+      <div class="agg-title">BRANCH LEADER · NMLS #2092481</div>
+      <div class="score-row"><span class="score" id="r-score">4.96</span><span class="stars">★★★★★</span></div>
+      <div class="score-src"><span id="r-count">154</span> VERIFIED REVIEWS · EXPERIENCE.COM</div>
+      <div class="gog-row" id="r-google" style="display:none;">Google: <b><span id="r-gscore"></span>★</b> · <span id="r-gcount"></span> reviews</div>
+      <div class="agg-links">
+        <a href="https://www.experience.com/reviews/richard-bigelow-126162" target="_blank" rel="noopener">EXPERIENCE.COM →</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Richard+Bigelow+Movement+Mortgage+Puyallup+WA" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
+      </div>
+    </div>
+    <div class="agg-card">
+      <div class="agg-name">Steven Wright</div>
+      <div class="agg-title">BRANCH LEADER · NMLS #201189</div>
+      <div class="score-row"><span class="score" id="s-score">4.94</span><span class="stars">★★★★★</span></div>
+      <div class="score-src"><span id="s-count">237</span> VERIFIED REVIEWS · EXPERIENCE.COM</div>
+      <div class="gog-row" id="s-google" style="display:none;">Google: <b><span id="s-gscore"></span>★</b> · <span id="s-gcount"></span> reviews</div>
+      <div class="agg-links">
+        <a href="https://www.experience.com/reviews/steven-wright-126161" target="_blank" rel="noopener">EXPERIENCE.COM →</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Steven+Wright+Movement+Mortgage+Puyallup+WA" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="eyebrow">RECENT WORDS FROM CLIENTS</div>
+  <div class="status" id="qstatus">Loading recent reviews…</div>
+  <div class="quotes" id="quotes"></div>
+
+  <div class="cta">
+    <a class="apply-btn" href="/#apply">START YOUR APPLICATION →</a>
+  </div>
+
+  <div class="footer">
+    <div class="lockup"><span class="rs-box">RS</span><span class="lend">LENDING</span></div>
+    <div class="powered">POWERED BY MOVEMENT MORTGAGE</div>
+    <div class="lic">
+      Richard Bigelow · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2092481" target="_blank" rel="noopener">NMLS #2092481</a> · Licensed in WA, AZ, ID, IL &amp; TX<br>
+      Steven Wright · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/201189" target="_blank" rel="noopener">NMLS #201189</a> · Licensed in WA, AZ, KY, MT &amp; TN<br>
+      Movement Mortgage, LLC · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS #39179</a><br>
+      <a href="https://movement.com/legal" target="_blank" rel="noopener">Full legal disclosures &amp; state licensing</a> · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS Consumer Access</a>
+    </div>
+    <div class="disc">REVIEWS REFLECT INDIVIDUAL CLIENT EXPERIENCES AND ARE NOT A GUARANTEE OF FUTURE RESULTS. INTEREST RATES AND PRODUCTS ARE SUBJECT TO CHANGE WITHOUT NOTICE AND MAY OR MAY NOT BE AVAILABLE AT THE TIME OF LOAN COMMITMENT OR LOCK-IN. BORROWERS MUST QUALIFY AT CLOSING FOR ALL BENEFITS. THIS IS NOT A LOAN COMMITMENT OR AN OFFER OF CREDIT. ALL INFORMATION MUST BE VERIFIED PRIOR TO LOAN APPROVAL.<br>EQUAL HOUSING OPPORTUNITY</div>
+  </div>
+</div>
+
+<script>
+  const first = s => s ? s.split(/\s+/)[0] : "A happy client";
+  fetch("/.netlify/functions/reviews")
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => {
+      const R = data.richard, S = data.steven;
+      if (R?.experience?.rating) {
+        document.getElementById("r-score").textContent = R.experience.rating.toFixed(2);
+        document.getElementById("r-count").textContent = R.experience.count;
+      }
+      if (S?.experience?.rating) {
+        document.getElementById("s-score").textContent = S.experience.rating.toFixed(2);
+        document.getElementById("s-count").textContent = S.experience.count;
+      }
+      if (R?.google?.rating) {
+        document.getElementById("r-gscore").textContent = R.google.rating;
+        document.getElementById("r-gcount").textContent = R.google.count;
+        document.getElementById("r-google").style.display = "";
+      }
+      if (S?.google?.rating) {
+        document.getElementById("s-gscore").textContent = S.google.rating;
+        document.getElementById("s-gcount").textContent = S.google.count;
+        document.getElementById("s-google").style.display = "";
+      }
+      // interleave quotes from both
+      const mix = [];
+      const rq = (R?.experience?.quotes)||[], sq = (S?.experience?.quotes)||[];
+      const n = Math.max(rq.length, sq.length);
+      for (let i=0;i<n;i++){
+        if (rq[i]) mix.push({...rq[i], lo:"RICHARD"});
+        if (sq[i]) mix.push({...sq[i], lo:"STEVEN"});
+      }
+      const wall = document.getElementById("quotes");
+      const st = document.getElementById("qstatus");
+      if (!mix.length) { st.textContent = "See all our reviews at the links above."; return; }
+      st.remove();
+      mix.slice(0,10).forEach(q => {
+        const d = document.createElement("div");
+        d.className = "qcard";
+        d.innerHTML = '<div class="qstars">★★★★★</div>' +
+          '<div class="qbody">“' + q.body.replace(/</g,"&lt;") + '”</div>' +
+          '<div class="qmeta">' + first(q.author).replace(/</g,"&lt;").toUpperCase() + ' · WORKED WITH <b>' + q.lo + '</b></div>';
+        wall.appendChild(d);
+      });
+    })
+    .catch(() => {
+      document.getElementById("qstatus").textContent =
+        "Read all our reviews at the Experience.com and Google links above.";
+    });
+</script>
+</body>
+</html>
