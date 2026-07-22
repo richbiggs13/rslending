@@ -53,6 +53,15 @@
   .tool.soon{opacity:.45; pointer-events:none; background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:26px;}
   .tool.soon .t-go{color:var(--muted);}
 
+  .apply-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px;}
+  .lo-card{background:linear-gradient(145deg,#1a1510,#101010); border:1px solid var(--gold); border-radius:22px; padding:28px;}
+  .lo-card .t-eyebrow{color:var(--gold); font-size:11px; letter-spacing:3px; font-weight:500; margin-bottom:12px;}
+  .lo-name{font-weight:300; font-size:27px; letter-spacing:1px; margin-bottom:6px;}
+  .lo-nmls{color:var(--muted); font-size:12.5px; letter-spacing:1px; line-height:1.7; margin-bottom:20px;}
+  .apply-btn{display:inline-block; background:var(--gold); color:#111; text-decoration:none; font-weight:500;
+    font-size:13px; letter-spacing:2px; padding:14px 26px; border-radius:999px; transition:transform .15s, background .15s;}
+  .apply-btn:hover{transform:translateY(-2px); background:#e2b98a;}
+
   .footer{text-align:center; margin-top:64px;}
   .lic{color:#828282; font-size:11.5px; letter-spacing:1px; line-height:2; margin-bottom:16px;}
   .lic a{color:#a8a8a8;}
@@ -71,6 +80,24 @@
   <h1>SMARTER MORTGAGE<br>DECISIONS</h1>
   <p class="sub">Interactive tools that make loan strategies easy to see, compare, and explain — built for real estate partners and homebuyers.</p>
   <div class="rule"></div>
+
+  <div class="eyebrow" id="apply">START YOUR APPLICATION</div>
+  <div class="apply-grid">
+    <div class="lo-card">
+      <div class="t-eyebrow">BRANCH LEADER</div>
+      <div class="lo-name">Richard Bigelow</div>
+      <div class="lo-nmls">NMLS #2092481<br>Licensed in WA, AZ, ID, IL &amp; TX</div>
+      <a class="apply-btn" href="https://easyapp.movement.com/apply/create_profile?userid=10104520" target="_blank" rel="noopener">APPLY WITH RICHARD →</a>
+    </div>
+    <div class="lo-card">
+      <div class="t-eyebrow">CO-BRANCH LEADER</div>
+      <div class="lo-name">Steven Wright</div>
+      <div class="lo-nmls">NMLS #201189<br>Licensed in WA, AZ, KY, MT &amp; TN</div>
+      <a class="apply-btn" href="https://easyapp.movement.com/apply/create_profile?userid=10101721" target="_blank" rel="noopener">APPLY WITH STEVEN →</a>
+    </div>
+  </div>
+
+  <div class="rule" style="margin-top:36px;"></div>
 
   <div class="eyebrow">THE TOOLS</div>
   <div class="tools">
@@ -96,8 +123,9 @@
 
   <div class="footer">
     <div class="lic">
-      Richard Bigelow · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2092481" target="_blank" rel="noopener">NMLS #2092481</a><br>
-      Movement Mortgage, LLC · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS #39179</a> · Licensed in WA, AZ &amp; TX<br>
+      Richard Bigelow · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2092481" target="_blank" rel="noopener">NMLS #2092481</a> · Licensed in WA, AZ, ID, IL &amp; TX<br>
+      Steven Wright · Co-Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/201189" target="_blank" rel="noopener">NMLS #201189</a> · Licensed in WA, AZ, KY, MT &amp; TN<br>
+      Movement Mortgage, LLC · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS #39179</a><br>
       <a href="https://movement.com/legal" target="_blank" rel="noopener">Full legal disclosures &amp; state licensing</a> · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS Consumer Access</a>
     </div>
     <div class="disc">INTEREST RATES AND PRODUCTS ARE SUBJECT TO CHANGE WITHOUT NOTICE AND MAY OR MAY NOT BE AVAILABLE AT THE TIME OF LOAN COMMITMENT OR LOCK-IN. BORROWERS MUST QUALIFY AT CLOSING FOR ALL BENEFITS. THIS IS NOT A LOAN COMMITMENT OR AN OFFER OF CREDIT. ALL INFORMATION MUST BE VERIFIED PRIOR TO LOAN APPROVAL.<br>EQUAL HOUSING OPPORTUNITY</div>
