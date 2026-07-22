@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Videos — RS|LENDING</title>
+<meta name="description" content="Mortgage tips and market updates from RS Lending — watch the latest videos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303; --red:#FF0000;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:48px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:920px; margin:0 auto; position:relative;}
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .back{display:inline-block; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:2px; margin-bottom:26px;}
+  .back:hover{color:var(--gold);}
+
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(38px,7vw,72px); letter-spacing:4px; line-height:1.02;}
+  .rule{height:1px; background:var(--gold-dim); margin:22px 0 30px;}
+  .sub{color:var(--muted); font-weight:300; font-size:15px; line-height:1.6; max-width:600px; margin-bottom:28px;}
+
+  .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:18px;}
+
+  .player-card{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:18px; margin-bottom:14px;}
+  .player{position:relative; width:100%; padding-top:56.25%; border-radius:14px; overflow:hidden; background:#000;}
+  .player iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .now-title{color:var(--fg); font-weight:300; font-size:17px; margin:14px 6px 2px; line-height:1.45;}
+
+  .grid-head{display:flex; align-items:baseline; justify-content:space-between; margin:30px 0 16px;}
+  .grid-head .count{color:var(--muted); font-size:12px; letter-spacing:2px;}
+  .vgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px;}
+  .vcard{
+    background:var(--card); border:1px solid var(--hairline); border-radius:16px; overflow:hidden;
+    cursor:pointer; transition:transform .15s, border-color .15s; text-align:left; padding:0;
+    font-family:inherit;
+  }
+  .vcard:hover{transform:translateY(-3px); border-color:var(--gold);}
+  .vcard.playing{border-color:var(--gold);}
+  .thumbwrap{position:relative; width:100%; padding-top:56.25%; background:#000;}
+  .thumbwrap img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .thumbwrap .play{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.25); opacity:0; transition:opacity .15s;
+  }
+  .vcard:hover .play{opacity:1;}
+  .play svg{width:44px; height:44px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.6));}
+  .vcard.playing .now-badge{
+    position:absolute; top:8px; left:8px; background:var(--gold); color:#111;
+    font-size:10px; letter-spacing:2px; font-weight:500; padding:4px 10px; border-radius:999px;
+  }
+  .vmeta{padding:12px 14px 14px;}
+  .vtitle{color:var(--fg); font-weight:300; font-size:13.5px; line-height:1.45; margin-bottom:6px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .vdate{color:var(--muted); font-size:11px; letter-spacing:1px;}
+
+  .status{color:var(--muted); font-size:13px; font-weight:300; padding:18px 0;}
+
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:30px;}
+  a.btn{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+    border-radius:999px; padding:14px 26px; font-size:13px; letter-spacing:2px; font-weight:500;
+    transition:transform .15s, border-color .15s, background .15s;
+  }
+  a.btn:hover{transform:translateY(-2px);}
+  .btn.primary{background:var(--red); color:#fff;}
+  .btn.primary:hover{background:#e60000;}
+  .btn.ghost{border:1px solid var(--gold-dim); color:var(--gold); background:transparent;}
+  .btn.ghost:hover{border-color:var(--gold);}
+  .yt-ic{width:20px; height:14px; display:inline-block;}
+
+  .footer{text-align:center; margin-top:56px;}
+  .lockup{display:inline-flex; align-items:center; gap:14px; margin-bottom:14px;}
+  .rs-box{border:2px solid #b9b9b9; color:#b9b9b9; font-weight:300; font-size:24px; padding:6px 14px;}
+  .lend{color:#b9b9b9; font-weight:300; font-size:24px; letter-spacing:6px;}
+  .powered{color:#828282; font-size:12px; letter-spacing:3px; margin-bottom:8px;}
+  .disc{color:#505050; font-size:10px; letter-spacing:2px;}
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <a class="back" href="/">← RS|LENDING HOME</a>
+
+  <div class="ticker"><span>WATCH</span><span class="line"></span><span>MORTGAGE INSIGHTS</span></div>
+  <h1>THE LATEST<br>VIDEOS</h1>
+  <div class="rule"></div>
+  <p class="sub">Market updates, buyer strategies, and mortgage know-how. Pick any video below — it plays right here.</p>
+
+  <div class="eyebrow">NOW PLAYING</div>
+  <div class="player-card">
+    <div class="player">
+      <iframe id="mainPlayer"
+        src="https://www.youtube-nocookie.com/embed/videoseries?list=UUqa3weSeiPUwYKgW10c02sw&rel=0"
+        title="RS Lending videos"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+    <div class="now-title" id="nowTitle"></div>
+  </div>
+
+  <div class="grid-head">
+    <div class="eyebrow" style="margin:0;">RECENT UPLOADS</div>
+    <div class="count" id="vidCount"></div>
+  </div>
+  <div class="status" id="status">Loading videos…</div>
+  <div class="vgrid" id="vgrid"></div>
+
+  <div class="cta-row">
+    <a class="btn primary" href="https://www.youtube.com/@RSLending?sub_confirmation=1" target="_blank" rel="noopener">
+      <svg class="yt-ic" viewBox="0 0 24 17" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 2.6A3 3 0 0 0 21.4.5C19.5 0 12 0 12 0S4.5 0 2.6.5A3 3 0 0 0 .5 2.6 31.4 31.4 0 0 0 0 8.5a31.4 31.4 0 0 0 .5 5.9 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1 31.4 31.4 0 0 0 .5-5.9 31.4 31.4 0 0 0-.5-5.9ZM9.5 12.1V4.9l6.3 3.6-6.3 3.6Z"/></svg>
+      SUBSCRIBE
+    </a>
+    <a class="btn ghost" href="https://www.youtube.com/@RSLending/videos" target="_blank" rel="noopener">ALL VIDEOS ON YOUTUBE →</a>
+  </div>
+
+  <div class="footer">
+    <div class="lockup"><span class="rs-box">RS</span><span class="lend">LENDING</span></div>
+    <div class="powered">POWERED BY MOVEMENT MORTGAGE</div>
+    <div class="disc">EQUAL HOUSING OPPORTUNITY</div>
+  </div>
+</div>
+
+<script>
+  const grid = document.getElementById("vgrid");
+  const statusEl = document.getElementById("status");
+  const player = document.getElementById("mainPlayer");
+  const nowTitle = document.getElementById("nowTitle");
+  const vidCount = document.getElementById("vidCount");
+
+  function fmtDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US",{month:"short", day:"numeric", year:"numeric"}).toUpperCase();
+  }
+
+  function play(v, card){
+    player.src = `https://www.youtube-nocookie.com/embed/${v.id}?rel=0&autoplay=1`;
+    nowTitle.textContent = v.title;
+    document.querySelectorAll(".vcard").forEach(c=>{
+      c.classList.remove("playing");
+      c.querySelector(".now-badge")?.remove();
+    });
+    card.classList.add("playing");
+    const badge = document.createElement("span");
+    badge.className = "now-badge"; badge.textContent = "PLAYING";
+    card.querySelector(".thumbwrap").appendChild(badge);
+    document.querySelector(".player-card").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+
+  fetch("/.netlify/functions/videos")
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => {
+      const vids = data.videos || [];
+      if(!vids.length) throw new Error("empty");
+      statusEl.remove();
+      vidCount.textContent = vids.length + " MOST RECENT";
+      vids.forEach((v,i) => {
+        const card = document.createElement("button");
+        card.className = "vcard";
+        card.innerHTML = `
+          <div class="thumbwrap">
+            <img src="${v.thumbnail}" alt="" loading="lazy">
+            <span class="play">
+              <svg viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.55)"/><path d="M9.5 7.5v9l7.5-4.5z"/></svg>
+            </span>
+          </div>
+          <div class="vmeta">
+            <div class="vtitle">${v.title.replace(/</g,"&lt;")}</div>
+            <div class="vdate">${fmtDate(v.published)}</div>
+          </div>`;
+        card.addEventListener("click", ()=>play(v, card));
+        grid.appendChild(card);
+        if(i===0){ nowTitle.textContent = "Newest: " + v.title; }
+      });
+    })
+    .catch(() => {
+      // Fallback: the playlist player above still works on its own.
+      statusEl.textContent = "Couldn't load the video list right now — use the player above to browse all recent uploads (playlist icon, top right), or visit our channel below.";
+    });
+</script>
+</body>
+</html>
