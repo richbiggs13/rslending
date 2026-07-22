@@ -157,7 +157,7 @@
 
 <script>
   // Live rating refresh — falls back silently to the static numbers above.
-  fetch("/.netlify/functions/reviews")
+  fetch("/.netlify/functions/reviews?t=" + Math.floor(Date.now()/600000))
     .then(r => r.ok ? r.json() : null)
     .then(d => {
       if (!d) return;
