@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RS|LENDING — Mortgage Tools</title>
+<meta name="description" content="Mortgage tools and resources for agents and clients — powered by Movement Mortgage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:64px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:920px; margin:0 auto; position:relative;}
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .lockup{display:flex; align-items:center; gap:16px; margin-bottom:10px;}
+  .rs-box{border:2px solid #b9b9b9; color:#b9b9b9; font-weight:300; font-size:28px; padding:8px 16px;}
+  .lend{color:#b9b9b9; font-weight:300; font-size:28px; letter-spacing:8px;}
+  .powered{color:#828282; font-size:12px; letter-spacing:3px; margin-bottom:40px;}
+
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(34px,6vw,60px); letter-spacing:4px; line-height:1.05; margin-bottom:14px;}
+  .sub{color:var(--muted); font-weight:300; font-size:16px; line-height:1.6; max-width:560px; margin-bottom:36px;}
+  .rule{height:1px; background:var(--gold-dim); margin:0 0 36px;}
+
+  .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:20px;}
+  .tools{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:20px;}
+  a.tool{
+    display:block; background:var(--card); border:1px solid var(--gold-dim); border-radius:22px;
+    padding:26px; text-decoration:none; color:var(--fg); transition:transform .15s, border-color .15s;
+  }
+  a.tool:hover{transform:translateY(-3px); border-color:var(--gold);}
+  .tool .t-eyebrow{color:var(--gold); font-size:11px; letter-spacing:3px; font-weight:500; margin-bottom:12px;}
+  .tool .t-name{font-weight:300; font-size:24px; letter-spacing:1px; margin-bottom:10px;}
+  .tool .t-desc{color:var(--muted); font-weight:300; font-size:13.5px; line-height:1.55;}
+  .tool .t-go{color:var(--green); font-size:12px; letter-spacing:2px; font-weight:500; margin-top:16px;}
+  .tool.soon{opacity:.45; pointer-events:none;}
+  .tool.soon .t-go{color:var(--muted);}
+
+  .footer{text-align:center; margin-top:64px;}
+  .disc{color:#505050; font-size:10px; letter-spacing:2px; line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <div class="lockup"><span class="rs-box">RS</span><span class="lend">LENDING</span></div>
+  <div class="powered">POWERED BY MOVEMENT MORTGAGE</div>
+
+  <div class="ticker"><span>MORTGAGE TOOLS</span><span class="line"></span><span>FOR AGENTS &amp; CLIENTS</span></div>
+  <h1>SMARTER MORTGAGE<br>DECISIONS</h1>
+  <p class="sub">Interactive tools that make loan strategies easy to see, compare, and explain — built for real estate partners and homebuyers.</p>
+  <div class="rule"></div>
+
+  <div class="eyebrow">THE TOOLS</div>
+  <div class="tools">
+    <a class="tool" href="/buydown.html">
+      <div class="t-eyebrow">CALCULATOR</div>
+      <div class="t-name">Temporary Buydown</div>
+      <div class="t-desc">Model 1/0, 2/1, 3/2/1, or custom buydowns. See payments, savings, total cost, and the break-even vs. spending the same dollars on a permanent buydown.</div>
+      <div class="t-go">OPEN →</div>
+    </a>
+    <div class="tool soon">
+      <div class="t-eyebrow">COMING SOON</div>
+      <div class="t-name">More Tools</div>
+      <div class="t-desc">New calculators and resources for agents and clients are on the way.</div>
+      <div class="t-go">SOON</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="disc">EXAMPLES ONLY · NOT A COMMITMENT TO LEND · RATES SUBJECT TO CHANGE<br>EQUAL HOUSING OPPORTUNITY</div>
+  </div>
+</div>
+</body>
+</html>

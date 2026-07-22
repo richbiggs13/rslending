@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temporary Buydown Calculator — RS|LENDING</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303; --red:#d98a8a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:48px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:920px; margin:0 auto; position:relative;}
+  /* crop marks */
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(38px,7vw,72px); letter-spacing:4px; line-height:1.02;}
+  h1 .accent{color:var(--fg);}
+  .rule{height:1px; background:var(--gold-dim); margin:22px 0 30px;}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:30px;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;}}
+
+  .card{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:26px 26px 30px;}
+  .card.green{border-color:var(--green-dim);}
+  .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:18px;}
+  .eyebrow.green{color:var(--green);}
+
+  label{display:block; color:var(--muted); font-size:12px; letter-spacing:2px; font-weight:500; margin:0 0 7px;}
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  input,select{
+    width:100%; background:#0a0a0a; border:1px solid var(--hairline); border-radius:12px;
+    color:var(--fg); font-family:inherit; font-size:19px; font-weight:300; padding:13px 15px;
+    transition:border-color .15s;
+  }
+  input:focus,select:focus{outline:none; border-color:var(--gold);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px;}
+  @media(max-width:600px){.row3{grid-template-columns:1fr;}}
+
+  .ladder{background:#0a0a0a; border:1px solid var(--hairline); border-radius:14px; padding:18px 20px; margin-bottom:18px;}
+  .ladder .lrow{display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; font-weight:300; font-size:14px;}
+  .ladder .lrow .lk{color:var(--muted);}
+  .ladder .lrow .lv{color:var(--fg); font-size:16px;}
+  .ladder .lrow.sub .lk,.ladder .lrow.sub .lv{color:var(--muted); font-size:13px;}
+  .ladder .lrow.tot{border-top:1px solid var(--hairline); margin-top:5px; padding-top:12px;}
+  .ladder .lrow.tot .lv{color:var(--green); font-size:18px; font-weight:400;}
+
+  .rate-hl{display:flex; justify-content:space-between; align-items:center;
+    background:rgba(212,165,116,.08); border:1px solid var(--gold-dim); border-radius:14px; padding:16px 22px; margin-bottom:18px;}
+  .rate-hl .lbl{color:var(--gold); font-weight:500; font-size:12px; letter-spacing:3px;}
+  .rate-hl .num{color:var(--gold); font-size:34px; font-weight:300;}
+  .input-wrap{position:relative;}
+  .input-wrap .pre,.input-wrap .post{position:absolute; top:50%; transform:translateY(-50%); color:var(--muted); font-size:18px; font-weight:300;}
+  .input-wrap .pre{left:15px;}
+  .input-wrap .pre ~ input{padding-left:32px;}
+  .input-wrap .post{right:15px;}
+
+  .presets{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;}
+  .preset{background:#0a0a0a; border:1px solid var(--hairline); color:var(--muted);
+    border-radius:999px; padding:7px 15px; font-family:inherit; font-size:12px; letter-spacing:1px;
+    cursor:pointer; transition:all .15s;}
+  .preset:hover{border-color:var(--gold-dim); color:var(--fg);}
+  .preset.active{border-color:var(--gold); color:var(--gold);}
+
+  .yr-row{display:grid; grid-template-columns:1fr 1.3fr auto; gap:10px; align-items:center; margin-bottom:10px;}
+  .yr-row .yr-label{color:var(--fg); font-size:14px; font-weight:400;}
+  .yr-row input{font-size:16px; padding:9px 12px;}
+  .yr-row .del{background:none; border:none; color:var(--muted); cursor:pointer; font-size:20px; line-height:1; padding:4px 8px;}
+  .yr-row .del:hover{color:var(--red);}
+  .add-yr{background:none; border:1px dashed var(--hairline); color:var(--muted); border-radius:10px;
+    width:100%; padding:9px; font-family:inherit; font-size:12px; letter-spacing:1px; cursor:pointer; margin-top:4px;}
+  .add-yr:hover{border-color:var(--gold-dim); color:var(--fg);}
+
+  /* results */
+  .results{margin-top:30px;}
+  .loan-line{color:var(--muted); font-size:14px; letter-spacing:1px; margin-bottom:4px;}
+  .pi-note{color:#777; font-size:11px; letter-spacing:1px; margin-bottom:18px;}
+  table{width:100%; border-collapse:collapse;}
+  th{text-align:left; color:var(--muted); font-size:11px; letter-spacing:2px; font-weight:500;
+    padding:0 0 12px; border-bottom:1px solid var(--hairline);}
+  th.r,td.r{text-align:right;}
+  td{padding:16px 0; border-bottom:1px solid var(--hairline); font-weight:300;}
+  td.yr{font-weight:500; font-size:15px;}
+  td.rate{color:var(--gold); font-size:24px;}
+  td.save{font-size:18px;}
+  td.save.pos{color:var(--green);}
+  td.save.zero{color:var(--muted);}
+  td.pay{color:var(--fg); font-size:17px;}
+  td.annual{color:var(--muted); font-size:15px;}
+
+  .total-pill{display:flex; justify-content:space-between; align-items:center; margin-top:24px;
+    background:var(--green-dim); border:2px solid var(--green); border-radius:18px; padding:20px 26px;}
+  .total-pill .lbl{color:#d2e6d7; font-weight:500; font-size:13px; letter-spacing:3px;}
+  .total-pill .num{font-size:40px; font-weight:300;}
+
+  .compare{margin-top:30px;}
+  .cmp-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:6px;}
+  @media(max-width:600px){.cmp-grid{grid-template-columns:1fr;}}
+  .stat{background:#0a0a0a; border:1px solid var(--hairline); border-radius:14px; padding:18px;}
+  .stat .k{color:var(--muted); font-size:11px; letter-spacing:2px; font-weight:500; margin-bottom:8px;}
+  .stat .v{font-size:26px; font-weight:300; color:var(--fg);}
+  .stat .v.gold{color:var(--gold);} .stat .v.green{color:var(--green);}
+  .stat .sub{color:var(--muted); font-size:12px; margin-top:4px;}
+  .verdict{margin-top:18px; padding:18px 20px; border-radius:14px; background:var(--card);
+    border-left:3px solid var(--gold); font-size:15px; font-weight:300; line-height:1.5; color:var(--fg);}
+  .verdict b{font-weight:500; color:var(--gold);}
+  .hidden{display:none;}
+
+  .footer{text-align:center; margin-top:48px;}
+  .lockup{display:inline-flex; align-items:center; gap:14px; margin-bottom:14px;}
+  .rs-box{border:2px solid #b9b9b9; color:#b9b9b9; font-weight:300; font-size:24px; padding:6px 14px;}
+  .lend{color:#b9b9b9; font-weight:300; font-size:24px; letter-spacing:6px;}
+  .powered{color:#828282; font-size:12px; letter-spacing:3px; margin-bottom:8px;}
+  .disc{color:#505050; font-size:10px; letter-spacing:2px;}
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <div class="ticker"><span>MORTGAGE TOOLS</span><span class="line"></span><span>BUYER'S PLAYBOOK</span></div>
+  <h1>TEMPORARY<br><span class="accent">BUYDOWN</span></h1>
+  <div class="rule"></div>
+
+  <div class="grid">
+    <!-- LEFT: LOAN INPUTS -->
+    <div class="card">
+      <div class="eyebrow">THE LOAN</div>
+      <div class="field">
+        <label>LOAN AMOUNT</label>
+        <div class="input-wrap"><span class="pre">$</span><input id="loan" type="text" inputmode="decimal" value="500,000"></div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>NOTE RATE</label>
+          <div class="input-wrap"><input id="rate" type="text" inputmode="decimal" value="6.5"><span class="post">%</span></div>
+        </div>
+        <div class="field">
+          <label>TERM (YRS)</label>
+          <input id="term" type="text" inputmode="numeric" value="30">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: STRUCTURE -->
+    <div class="card">
+      <div class="eyebrow">THE STRUCTURE</div>
+      <div class="presets" id="presets">
+        <button class="preset" data-preset="1-0">1/0</button>
+        <button class="preset active" data-preset="2-1">2/1</button>
+        <button class="preset" data-preset="3-2-1">3/2/1</button>
+        <button class="preset" data-preset="custom">CUSTOM</button>
+      </div>
+      <div id="years"></div>
+      <button class="add-yr" id="addYr">+ ADD YEAR</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results card" style="margin-top:30px;">
+    <div class="eyebrow">HOW THE PAYMENT STEPS DOWN</div>
+    <div class="loan-line" id="loanLine"></div>
+    <div class="pi-note">PRINCIPAL &amp; INTEREST ONLY · TAXES &amp; INSURANCE NOT INCLUDED</div>
+    <table>
+      <thead><tr><th>YEAR</th><th>RATE</th><th class="r">MONTHLY SAVINGS</th><th class="r">P&amp;I PAYMENT</th><th class="r">ANNUAL SUBSIDY</th></tr></thead>
+      <tbody id="resBody"></tbody>
+    </table>
+    <div class="total-pill"><span class="lbl">TOTAL BUYDOWN COST</span><span class="num" id="totalCost">$0</span></div>
+  </div>
+
+  <!-- PERMANENT COMPARISON -->
+  <div class="compare card green" style="margin-top:30px;">
+    <div class="eyebrow green">VS. A PERMANENT BUYDOWN — SAME BUDGET</div>
+    <p style="color:var(--muted); font-size:13px; font-weight:300; line-height:1.5; margin-bottom:18px;">
+      Spends the <b style="color:var(--fg);font-weight:500;">same dollars</b> as the temporary buydown on permanent discount points instead. The note rate already includes 1 point; whatever's left buys down the permanent rate, snapped to the nearest eighth.
+    </p>
+    <div class="row3">
+      <div class="field">
+        <label>POINTS IN NOTE RATE</label>
+        <input id="ptsInNote" type="text" inputmode="decimal" value="1">
+      </div>
+      <div class="field">
+        <label>RATE DROP / POINT</label>
+        <div class="input-wrap"><input id="dropPerPt" type="text" inputmode="decimal" value="0.5"><span class="post">%</span></div>
+      </div>
+      <div class="field">
+        <label>RATE INCREMENT</label>
+        <div class="input-wrap"><input id="rateIncr" type="text" inputmode="decimal" value="0.125"><span class="post">%</span></div>
+      </div>
+    </div>
+
+    <div id="cmpOut">
+      <div class="ladder" id="ladder"></div>
+      <div class="rate-hl">
+        <span class="lbl">PERMANENT RATE ACHIEVED</span>
+        <span class="num" id="permRateVal">—</span>
+      </div>
+      <div class="cmp-grid">
+        <div class="stat"><div class="k">PERM MONTHLY SAVINGS</div><div class="v green" id="permSave">—</div><div class="sub">vs. note payment, forever</div></div>
+        <div class="stat"><div class="k">RECOUP BUYDOWN COST</div><div class="v gold" id="permRecoup">—</div><div class="sub" id="recoupSub">—</div></div>
+        <div class="stat"><div class="k">CROSSOVER VS. TEMP</div><div class="v" id="crossover">—</div><div class="sub">same budget, when perm total wins</div></div>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="lockup"><span class="rs-box">RS</span><span class="lend">LENDING</span></div>
+    <div class="powered">POWERED BY MOVEMENT MORTGAGE</div>
+    <div class="disc">EXAMPLE ONLY · NOT A COMMITMENT TO LEND · RATES SUBJECT TO CHANGE</div>
+  </div>
+</div>
+
+<script>
+  const PRESETS = {
+    "1-0":   [1],
+    "2-1":   [2,1],
+    "3-2-1": [3,2,1],
+  };
+  let reductions = [...PRESETS["2-1"]]; // array of % reductions, year 1..N
+
+  const $ = id => document.getElementById(id);
+  const num = v => { const n = parseFloat(String(v).replace(/[^0-9.]/g,"")); return isNaN(n)?0:n; };
+  const fmt$ = n => "$" + Math.round(n).toLocaleString("en-US");
+  const fmtPct = n => (Math.round(n*1000)/1000).toString().replace(/\.?0+$/,"") + "%";
+
+  // Standard amortized P&I
+  function pmt(principal, annualRatePct, termYears){
+    const r = annualRatePct/100/12, n = termYears*12;
+    if(r===0) return principal/n;
+    return principal * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+  }
+
+  function renderYearInputs(){
+    const wrap = $("years"); wrap.innerHTML = "";
+    reductions.forEach((red, i) => {
+      const div = document.createElement("div");
+      div.className = "yr-row";
+      div.innerHTML = `<span class="yr-label">YEAR ${i+1}</span>
+        <div class="input-wrap"><input type="text" inputmode="decimal" value="${red}" data-i="${i}"><span class="post" style="font-size:14px;">% off</span></div>
+        <button class="del" data-del="${i}" title="Remove">×</button>`;
+      wrap.appendChild(div);
+    });
+    wrap.querySelectorAll("input").forEach(inp=>inp.addEventListener("input", e=>{
+      reductions[+e.target.dataset.i] = num(e.target.value); markCustom(); calc();
+    }));
+    wrap.querySelectorAll(".del").forEach(b=>b.addEventListener("click", e=>{
+      reductions.splice(+e.target.dataset.del,1); markCustom(); renderYearInputs(); calc();
+    }));
+  }
+
+  function markCustom(){
+    document.querySelectorAll(".preset").forEach(p=>p.classList.remove("active"));
+    let matched=null;
+    for(const [k,v] of Object.entries(PRESETS)){
+      if(v.length===reductions.length && v.every((x,i)=>x===reductions[i])) matched=k;
+    }
+    document.querySelector(`.preset[data-preset="${matched||'custom'}"]`)?.classList.add("active");
+  }
+
+  function calc(){
+    const loan = num($("loan").value), rate = num($("rate").value), term = num($("term").value)||30;
+    if(loan<=0 || rate<=0){ return; }
+    const full = pmt(loan, rate, term);
+
+    $("loanLine").textContent =
+      `${fmt$(loan)} LOAN · ${fmtPct(rate)} NOTE RATE · ${term}-YR FIXED`;
+
+    // temp buydown rows
+    const body = $("resBody"); body.innerHTML="";
+    let totalCost = 0;
+    reductions.forEach((red,i)=>{
+      const r = Math.max(rate-red,0);
+      const pay = pmt(loan, r, term);
+      const save = full - pay;
+      totalCost += save*12;
+      body.innerHTML += `<tr>
+        <td class="yr">YEAR ${i+1}</td>
+        <td class="rate">${fmtPct(r)}</td>
+        <td class="r save ${save>0.5?'pos':'zero'}">${save>0.5?'+'+fmt$(save)+'/mo':'—'}</td>
+        <td class="r pay">${fmt$(pay)}</td>
+        <td class="r annual">${save>0.5?fmt$(save*12):'—'}</td>
+      </tr>`;
+    });
+    // full-rate year
+    body.innerHTML += `<tr>
+      <td class="yr">YEAR ${reductions.length+1}+</td>
+      <td class="rate">${fmtPct(rate)}</td>
+      <td class="r save zero">full payment</td>
+      <td class="r pay">${fmt$(full)}</td>
+      <td class="r annual">—</td>
+    </tr>`;
+    $("totalCost").textContent = fmt$(totalCost);
+
+    // ── PERMANENT COMPARISON — same budget as the temp buydown ──
+    const budget   = totalCost;                       // perm spend = temp cost
+    const costPerPt= loan * 0.01;                      // 1 point = 1% of loan
+    const ptsInNote= num($("ptsInNote").value);        // points already in note rate
+    const dropPerPt= num($("dropPerPt").value) || 0.5; // % rate drop per point
+    const incr     = num($("rateIncr").value) || 0.125;// snap rates to this grid
+    const notePts$ = ptsInNote * costPerPt;
+    const avail    = budget - notePts$;                 // $ left for buydown
+    const ladder   = $("ladder");
+
+    if(budget<=0){ $("permRateVal").textContent="—"; ladder.innerHTML=""; return; }
+
+    const ptsBuydown = avail>0 ? avail / costPerPt : 0;
+    const rawDrop    = ptsBuydown * dropPerPt;          // raw % reduction
+    let permRate     = rate - rawDrop;
+    permRate = Math.round(permRate / incr) * incr;      // snap to grid
+    permRate = Math.max(permRate, 0);
+    const snapDrop   = rate - permRate;
+
+    ladder.innerHTML =
+      `<div class="lrow"><span class="lk">Budget (= temporary buydown cost)</span><span class="lv">${fmt$(budget)}</span></div>
+       <div class="lrow sub"><span class="lk">− Note-rate points (${(+ptsInNote).toFixed(2)} pt × ${fmt$(costPerPt)})</span><span class="lv">−${fmt$(notePts$)}</span></div>
+       <div class="lrow tot"><span class="lk">Available for buydown</span><span class="lv">${fmt$(Math.max(avail,0))}</span></div>
+       <div class="lrow sub"><span class="lk">= ${ptsBuydown.toFixed(2)} pts × ${fmtPct(dropPerPt)}/pt = −${fmtPct(rawDrop)} → snaps to −${fmtPct(snapDrop)}</span><span class="lv">${fmtPct(permRate)}</span></div>`;
+
+    $("permRateVal").textContent = fmtPct(permRate);
+
+    const permPay  = pmt(loan, permRate, term);
+    const permSave = full - permPay;                   // monthly, forever
+    $("permSave").textContent = permSave>0.5 ? "+"+fmt$(permSave)+"/mo" : "—";
+
+    if(avail>0 && permSave>0.5){
+      const recoupMo = avail / permSave;
+      $("permRecoup").textContent = (recoupMo/12).toFixed(1)+" yrs";
+      $("recoupSub").textContent = fmt$(avail)+" ÷ savings = "+Math.round(recoupMo)+" mo";
+    } else {
+      $("permRecoup").textContent = "—";
+      $("recoupSub").textContent = avail<=0 ? "budget only covers note rate" : "—";
+    }
+
+    // Crossover — equal budgets, so cumulative-savings crossover IS the true break-even.
+    let cumTemp=0, cumPerm=0, crossMo=null;
+    const maxMo = term*12;
+    for(let m=1;m<=maxMo;m++){
+      const yrIdx = Math.ceil(m/12);
+      const red = (yrIdx<=reductions.length)? reductions[yrIdx-1] : 0;
+      cumTemp += full - pmt(loan, Math.max(rate-red,0), term);
+      cumPerm += permSave;
+      if(crossMo===null && cumPerm >= cumTemp) crossMo=m;
+    }
+    const cross = $("crossover");
+    if(crossMo){ cross.textContent=(crossMo/12).toFixed(1)+" yrs"; cross.nextElementSibling.textContent="month "+crossMo+" — same budget"; }
+    else { cross.textContent=">"+term+" yrs"; cross.nextElementSibling.textContent="temp wins entire term"; }
+
+    let v;
+    if(permSave<=0.5){
+      v = `The budget barely covers the note rate — there's nothing left for a meaningful permanent buydown, so the <b>temporary buydown</b> wins by default.`;
+    } else if(!crossMo){
+      v = `For the same ${fmt$(budget)}, the <b>temporary buydown's</b> front-loaded relief is never overtaken across ${term} years. Lean temp — especially if the borrower may refi or sell.`;
+    } else {
+      v = `Same ${fmt$(budget)} either way. The <b>temporary buydown</b> gives more total savings for the first <b>${(crossMo/12).toFixed(1)} years</b>; after that, the permanent <b>${fmtPct(permRate)}</b> pulls ahead and keeps saving for the life of the loan. Lean temp if they'll likely refi or sell before year ${Math.round(crossMo/12)}, perm if they'll stay put.`;
+    }
+    $("verdict").innerHTML = v;
+  }
+
+  // preset buttons
+  document.querySelectorAll(".preset").forEach(p=>p.addEventListener("click", ()=>{
+    const k=p.dataset.preset;
+    if(k==="custom"){ /* keep current */ }
+    else { reductions=[...PRESETS[k]]; }
+    document.querySelectorAll(".preset").forEach(x=>x.classList.remove("active"));
+    p.classList.add("active");
+    renderYearInputs(); calc();
+  }));
+  $("addYr").addEventListener("click", ()=>{
+    reductions.push(reductions.length ? Math.max(reductions[reductions.length-1]-0,1) : 1);
+    markCustom(); renderYearInputs(); calc();
+  });
+  ["loan","rate","term","ptsInNote","dropPerPt","rateIncr"].forEach(id=>$(id).addEventListener("input", calc));
+  // light formatting for loan field on blur
+  $("loan").addEventListener("blur", e=>{ const n=num(e.target.value); if(n) e.target.value=n.toLocaleString("en-US"); });
+
+  renderYearInputs(); calc();
+</script>
+</body>
+</html>
