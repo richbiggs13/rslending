@@ -152,7 +152,7 @@
 
 <script>
   const first = s => s ? s.split(/\s+/)[0] : "A happy client";
-  fetch("/.netlify/functions/reviews")
+  fetch("/.netlify/functions/reviews?t=" + Math.floor(Date.now()/600000))
     .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
       const R = data.richard, S = data.steven;
