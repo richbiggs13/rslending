@@ -37,6 +37,14 @@
   .sub{color:var(--muted); font-weight:300; font-size:15px; line-height:1.6; max-width:620px; margin-bottom:28px;}
   .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:18px;}
 
+  .combined{background:linear-gradient(145deg,#1a1510,#101010); border:1px solid var(--gold); border-radius:22px;
+    padding:34px 26px; text-align:center; margin-bottom:22px;}
+  .combined .c-label{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:14px;}
+  .combined .c-row{display:flex; align-items:baseline; justify-content:center; gap:16px; flex-wrap:wrap;}
+  .combined .c-score{color:var(--gold); font-size:clamp(56px,10vw,84px); font-weight:300; line-height:1;}
+  .combined .c-stars{color:var(--gold); font-size:clamp(18px,4vw,26px); letter-spacing:4px;}
+  .combined .c-sub{color:var(--muted); font-size:12.5px; letter-spacing:1.5px; margin-top:14px; line-height:1.7;}
+
   .agg-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px; margin-bottom:36px;}
   .agg-card{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:26px;}
   .agg-name{font-weight:300; font-size:24px; letter-spacing:1px; margin-bottom:2px;}
@@ -96,27 +104,27 @@
   <div class="rule"></div>
   <p class="sub">Hundreds of five-star experiences across Experience.com and Google — updated automatically as new reviews come in.</p>
 
+  <div class="combined">
+    <div class="c-label">OUR COMBINED CLIENT RATING</div>
+    <div class="c-row"><span class="c-score" id="c-score">4.95</span><span class="c-stars">★★★★★</span></div>
+    <div class="c-sub"><span id="c-count">391</span> VERIFIED REVIEWS ACROSS OUR TEAM · EXPERIENCE.COM &amp; GOOGLE SOURCES</div>
+  </div>
+
   <div class="agg-grid">
     <div class="agg-card">
       <div class="agg-name">Richard Bigelow</div>
       <div class="agg-title">BRANCH LEADER · NMLS #2092481</div>
-      <div class="score-row"><span class="score" id="r-score">4.96</span><span class="stars">★★★★★</span></div>
-      <div class="score-src"><span id="r-count">154</span> VERIFIED REVIEWS · EXPERIENCE.COM</div>
-      <div class="gog-row" id="r-google" style="display:none;">Google: <b><span id="r-gscore"></span>★</b> · <span id="r-gcount"></span> reviews</div>
       <div class="agg-links">
         <a href="https://www.experience.com/reviews/richard-bigelow-126162" target="_blank" rel="noopener">EXPERIENCE.COM →</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Richard+Bigelow+Movement+Mortgage+Puyallup+WA" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
+        <a href="https://search.google.com/local/reviews?placeid=ChIJo-C9cfH7kFQRvw2mhfGItG0" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
       </div>
     </div>
     <div class="agg-card">
       <div class="agg-name">Steven Wright</div>
       <div class="agg-title">BRANCH LEADER · NMLS #201189</div>
-      <div class="score-row"><span class="score" id="s-score">4.94</span><span class="stars">★★★★★</span></div>
-      <div class="score-src"><span id="s-count">237</span> VERIFIED REVIEWS · EXPERIENCE.COM</div>
-      <div class="gog-row" id="s-google" style="display:none;">Google: <b><span id="s-gscore"></span>★</b> · <span id="s-gcount"></span> reviews</div>
       <div class="agg-links">
         <a href="https://www.experience.com/reviews/steven-wright-126161" target="_blank" rel="noopener">EXPERIENCE.COM →</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Steven+Wright+Movement+Mortgage+Puyallup+WA" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
+        <a href="https://search.google.com/local/reviews?placeid=ChIJjywdTA77kFQR_Aw0SlcS2Qs" target="_blank" rel="noopener">GOOGLE REVIEWS →</a>
       </div>
     </div>
   </div>
@@ -148,23 +156,13 @@
     .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
       const R = data.richard, S = data.steven;
-      if (R?.experience?.rating) {
-        document.getElementById("r-score").textContent = R.experience.rating.toFixed(2);
-        document.getElementById("r-count").textContent = R.experience.count;
-      }
-      if (S?.experience?.rating) {
-        document.getElementById("s-score").textContent = S.experience.rating.toFixed(2);
-        document.getElementById("s-count").textContent = S.experience.count;
-      }
-      if (R?.google?.rating) {
-        document.getElementById("r-gscore").textContent = R.google.rating;
-        document.getElementById("r-gcount").textContent = R.google.count;
-        document.getElementById("r-google").style.display = "";
-      }
-      if (S?.google?.rating) {
-        document.getElementById("s-gscore").textContent = S.google.rating;
-        document.getElementById("s-gcount").textContent = S.google.count;
-        document.getElementById("s-google").style.display = "";
+      // blended, review-weighted average across both LOs
+      const rR = R?.experience?.rating, cR = R?.experience?.count;
+      const rS = S?.experience?.rating, cS = S?.experience?.count;
+      if (rR && rS && cR && cS) {
+        const blend = (rR*cR + rS*cS) / (cR + cS);
+        document.getElementById("c-score").textContent = blend.toFixed(2);
+        document.getElementById("c-count").textContent = cR + cS;
       }
       // interleave quotes from both
       const mix = [];
