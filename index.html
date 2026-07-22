@@ -62,6 +62,19 @@
     font-size:13px; letter-spacing:2px; padding:14px 26px; border-radius:999px; transition:transform .15s, background .15s;}
   .apply-btn:hover{transform:translateY(-2px); background:#e2b98a;}
 
+  .contact-row{display:flex; gap:8px; margin-top:14px;}
+  .c-btn{flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+    border:1px solid var(--gold-dim); color:var(--gold); border-radius:12px; padding:11px 6px;
+    font-size:11px; letter-spacing:1.5px; font-weight:500; text-decoration:none;
+    transition:border-color .15s, background .15s, transform .15s;}
+  .c-btn:hover{border-color:var(--gold); background:rgba(212,165,116,.08); transform:translateY(-1px);}
+  .c-btn svg{width:14px; height:14px; flex:none;}
+  .c-info{color:var(--muted); font-size:11.5px; letter-spacing:.5px; margin-top:10px; line-height:1.7; word-break:break-word;}
+  @media(max-width:600px){
+    .c-btn{padding:14px 6px; font-size:12px;}
+    .c-btn svg{width:16px; height:16px;}
+  }
+
   .trust{display:flex; align-items:center; gap:14px 26px; flex-wrap:wrap; margin-top:20px;
     background:var(--card); border:1px solid var(--hairline); border-radius:16px; padding:16px 22px;}
   .trust .t-item{color:var(--muted); font-size:13px; letter-spacing:1.5px; font-weight:300; white-space:nowrap;}
@@ -100,12 +113,24 @@
       <div class="lo-name">Richard Bigelow</div>
       <div class="lo-nmls">NMLS #2092481<br>Licensed in WA, AZ, ID, IL &amp; TX</div>
       <a class="apply-btn" href="https://easyapp.movement.com/apply/create_profile?userid=10104520" target="_blank" rel="noopener">APPLY WITH RICHARD →</a>
+      <div class="contact-row">
+        <a class="c-btn" href="tel:+12534950404"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>CALL</a>
+        <a class="c-btn" href="sms:+12534950404"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>TEXT</a>
+        <a class="c-btn" href="mailto:richard.bigelow@movement.com?subject=Loan%20inquiry%20from%20rslending.co"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>EMAIL</a>
+      </div>
+      <div class="c-info">(253) 495-0404 · richard.bigelow@movement.com</div>
     </div>
     <div class="lo-card">
       <div class="t-eyebrow">BRANCH LEADER</div>
       <div class="lo-name">Steven Wright</div>
       <div class="lo-nmls">NMLS #201189<br>Licensed in WA, AZ, KY, MT &amp; TN</div>
       <a class="apply-btn" href="https://easyapp.movement.com/apply/create_profile?userid=10101721" target="_blank" rel="noopener">APPLY WITH STEVEN →</a>
+      <div class="contact-row">
+        <a class="c-btn" href="tel:+12532308622"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>CALL</a>
+        <a class="c-btn" href="sms:+12532308622"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>TEXT</a>
+        <a class="c-btn" href="mailto:steven.wright@movement.com?subject=Loan%20inquiry%20from%20rslending.co"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>EMAIL</a>
+      </div>
+      <div class="c-info">(253) 230-8622 · steven.wright@movement.com</div>
     </div>
   </div>
 
