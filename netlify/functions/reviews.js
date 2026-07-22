@@ -7,25 +7,32 @@ const PROFILES = [
     key: "richard",
     name: "Richard Bigelow",
     url: "https://www.experience.com/reviews/richard-bigelow-126162",
-    placeIdEnv: "RICHARD_PLACE_ID",
+    placeId: "ChIJo-C9cfH7kFQRvw2mhfGItG0",
   },
   {
     key: "steven",
     name: "Steven Wright",
     url: "https://www.experience.com/reviews/steven-wright-126161",
-    placeIdEnv: "STEVEN_PLACE_ID",
+    placeId: "ChIJjywdTA77kFQR_Aw0SlcS2Qs",
   },
 ];
 
+const UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+
 async function fetchExperience(profile) {
   const res = await fetch(profile.url, {
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; RSLendingSite/1.0)" },
+    headers: {
+      "User-Agent": UA,
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9",
+    },
   });
   if (!res.ok) throw new Error(`Experience.com ${res.status}`);
   const html = await res.text();
 
   const ldMatch = html.match(
-    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/
+    /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/
   );
   let rating = null, count = null, quotes = [];
   if (ldMatch) {
@@ -55,7 +62,7 @@ async function fetchExperience(profile) {
 
 async function fetchGoogle(profile) {
   const key = process.env.GOOGLE_PLACES_KEY;
-  const placeId = process.env[profile.placeIdEnv];
+  const placeId = profile.placeId;
   if (!key || !placeId) return null;
   const res = await fetch(
     `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=rating,user_ratings_total&key=${key}`
