@@ -45,12 +45,13 @@ async function fetchExperience(profile) {
         rating = rv ? parseFloat(rv[1]) : null;
         count = rc ? parseInt(rc[1]) : null;
       }
-      // pull review bodies + authors; skip auto-generated placeholders
-      const revRe = /"reviewBody":"((?:[^"\\]|\\.)*)"[\s\S]{0,400}?"author":\{[^}]*"name":"((?:[^"\\]|\\.)*)"/g;
+      // pull authors + review bodies (author precedes body in their JSON-LD);
+      // skip auto-generated placeholders
+      const revRe = /"author":\{[^}]*"name":"((?:[^"\\]|\\.)*)"[\s\S]{0,400}?"reviewBody":"((?:[^"\\]|\\.)*)"/g;
       let m;
       while ((m = revRe.exec(flat)) && quotes.length < 8) {
-        const body = JSON.parse('"' + m[1] + '"');
-        const author = JSON.parse('"' + m[2] + '"');
+        const author = JSON.parse('"' + m[1] + '"');
+        const body = JSON.parse('"' + m[2] + '"');
         if (/received a review with/i.test(body)) continue;
         if (body.length < 30) continue;
         quotes.push({ body: body.slice(0, 320), author });
