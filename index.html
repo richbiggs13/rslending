@@ -110,8 +110,7 @@
   </div>
 
   <div class="trust">
-    <span class="t-item"><span class="star">★</span> <b id="tr-r">4.96</b> · <span id="tc-r">154</span> REVIEWS — RICHARD</span>
-    <span class="t-item"><span class="star">★</span> <b id="tr-s">4.94</b> · <span id="tc-s">237</span> REVIEWS — STEVEN</span>
+    <span class="t-item"><span class="star">★★★★★</span> <b id="tr-c">4.95</b> · <span id="tc-c">391</span> COMBINED CLIENT REVIEWS</span>
     <a class="t-link" href="/reviews.html">READ OUR REVIEWS →</a>
   </div>
 
@@ -162,13 +161,12 @@
     .then(r => r.ok ? r.json() : null)
     .then(d => {
       if (!d) return;
-      if (d.richard?.experience?.rating) {
-        document.getElementById("tr-r").textContent = d.richard.experience.rating.toFixed(2);
-        document.getElementById("tc-r").textContent = d.richard.experience.count;
-      }
-      if (d.steven?.experience?.rating) {
-        document.getElementById("tr-s").textContent = d.steven.experience.rating.toFixed(2);
-        document.getElementById("tc-s").textContent = d.steven.experience.count;
+      const rR = d.richard?.experience?.rating, cR = d.richard?.experience?.count;
+      const rS = d.steven?.experience?.rating, cS = d.steven?.experience?.count;
+      if (rR && rS && cR && cS) {
+        const blend = (rR*cR + rS*cS) / (cR + cS);
+        document.getElementById("tr-c").textContent = blend.toFixed(2);
+        document.getElementById("tc-c").textContent = cR + cS;
       }
     })
     .catch(() => {});
