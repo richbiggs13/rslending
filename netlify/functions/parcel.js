@@ -105,7 +105,8 @@ exports.handler = async (event) => {
         if (county === "Pierce" && tca && PIERCE_TCA[tca]) {
           const rate = PIERCE_TCA[tca];
           estAnnualTax = Math.round(taxable * rate / 1000 + PIERCE_NONLEVY);
-          note = "2026 levy $" + rate.toFixed(2) + "/1k (tax area " + tca + ") + ~$" + PIERCE_NONLEVY + " est. parcel charges";
+          note = "2026 levy $" + rate.toFixed(2) + "/1k (tax area " + tca + ") + ~$" + PIERCE_NONLEVY +
+            " est. parcel charges. Uses the county's latest assessed value — the current-year bill is set by LAST year's assessment, so confirm the exact bill";
         } else if (info) {
           estAnnualTax = Math.round(taxable * info.levy);
           note = "county avg levy estimate";
