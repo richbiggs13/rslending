@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Net Sheet — RS|LENDING</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="description" content="Washington seller net proceeds calculator with accurate graduated excise tax — RS Lending, powered by Movement Mortgage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:48px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:980px; margin:0 auto; position:relative;}
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .back{display:inline-block; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:2px; margin-bottom:26px;}
+  .back:hover{color:var(--gold);}
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(38px,7vw,72px); letter-spacing:4px; line-height:1.02;}
+  .rule{height:1px; background:var(--gold-dim); margin:22px 0 30px;}
+  .sub{color:var(--muted); font-weight:300; font-size:15px; line-height:1.6; max-width:640px; margin-bottom:28px;}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start;}
+  @media(max-width:820px){.grid{grid-template-columns:1fr;}}
+  .card{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; padding:24px 24px 28px;}
+  .eyebrow{color:var(--gold); font-weight:500; font-size:13px; letter-spacing:4px; margin-bottom:16px;}
+  .eyebrow.mt{margin-top:26px;}
+  label{display:block; color:var(--muted); font-size:11.5px; letter-spacing:1.5px; font-weight:500; margin:0 0 6px;}
+  .field{margin-bottom:14px;}
+  input,select{
+    width:100%; background:#0a0a0a; border:1px solid var(--hairline); border-radius:12px;
+    color:var(--fg); font-family:inherit; font-size:17px; font-weight:300; padding:11px 13px;
+    transition:border-color .15s;
+  }
+  input:focus,select:focus{outline:none; border-color:var(--gold);}
+  input.dirty{border-color:#5a4a35;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .input-wrap{position:relative;}
+  .input-wrap .pre,.input-wrap .post{position:absolute; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; font-weight:300;}
+  .input-wrap .pre{left:13px;}
+  .input-wrap .pre ~ input{padding-left:28px;}
+  .input-wrap .post{right:13px;}
+  .dp-tog{display:inline-flex; gap:4px;}
+  .tg{background:#0a0a0a; border:1px solid var(--hairline); color:var(--muted); border-radius:8px;
+    padding:2px 9px; font-family:inherit; font-size:11px; cursor:pointer; transition:all .15s;}
+  .tg.active{border-color:var(--gold); color:var(--gold);}
+  .lbl-row{display:flex; align-items:center; justify-content:space-between;}
+  .hint{color:#6d6d6d; font-size:10.5px; letter-spacing:.5px; margin-top:4px; line-height:1.5;}
+
+  .res-rows{margin-bottom:6px;}
+  .rrow{display:flex; justify-content:space-between; align-items:baseline; padding:7px 0;
+    border-bottom:1px solid #1e1e1e; font-weight:300; font-size:14px;}
+  .rrow .k{color:var(--muted);}
+  .rrow .v{color:var(--fg); font-size:15px;}
+  .rrow.sub2 .k,.rrow.sub2 .v{color:#7a7a7a; font-size:12.5px;}
+  .rrow.head{border-bottom:1px solid var(--hairline);}
+  .rrow.head .k{color:var(--gold); font-size:11.5px; letter-spacing:2px; font-weight:500;}
+  .rrow.head .v{color:var(--muted); font-size:12px;}
+  .rrow.credit .v{color:var(--green);}
+  .net-pill{display:flex; justify-content:space-between; align-items:center; margin-top:20px;
+    background:var(--green-dim); border:2px solid var(--green); border-radius:18px; padding:18px 24px;}
+  .net-pill .lbl{color:#d2e6d7; font-weight:500; font-size:12px; letter-spacing:2.5px;}
+  .net-pill .num{font-size:36px; font-weight:300;}
+  .net-pill.neg{background:#402525; border-color:#c98080;}
+
+  .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;}
+  .abtn{flex:1; min-width:160px; text-align:center; background:var(--gold); color:#111; border:none; cursor:pointer;
+    font-family:inherit; font-weight:500; font-size:13px; letter-spacing:2px; padding:14px 18px; border-radius:999px;
+    transition:transform .15s, background .15s;}
+  .abtn:hover{transform:translateY(-2px); background:#e2b98a;}
+  .abtn.ghost{background:transparent; border:1px solid var(--gold-dim); color:var(--gold);}
+  .abtn.ghost:hover{border-color:var(--gold);}
+
+  .qualify{margin-top:18px; padding:13px 16px; border:1px solid var(--hairline); border-radius:12px;
+    color:#8a8a8a; font-size:10.5px; letter-spacing:1px; line-height:1.7; font-weight:300;}
+
+  .footer{text-align:center; margin-top:52px;}
+  .lic{color:#828282; font-size:11.5px; letter-spacing:1px; line-height:2; margin-bottom:16px;}
+  .lic a{color:#a8a8a8;}
+  .lic a:hover{color:var(--gold);}
+  .disc{color:#606060; font-size:10px; letter-spacing:1.5px; line-height:1.9; max-width:760px; margin:0 auto;}
+
+  /* ── PRINT SHEET ─────────────────────────── */
+  #printSheet{display:none;}
+  @media print{
+    @page{size:letter portrait; margin:0.45in;}
+    body{background:#fff; padding:0;}
+    .frame{display:none!important;}
+    #printSheet{display:block!important; font-family:'Poppins',sans-serif; color:#1a1a1a;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    .p-head{background:#141414!important; border-radius:10pt; padding:14pt 18pt; display:flex;
+      justify-content:space-between; align-items:center; margin-bottom:12pt;}
+    .p-head img{height:44pt;}
+    .p-head .p-title{color:#fff; text-align:right; font-weight:300; font-size:15pt; letter-spacing:2pt;}
+    .p-head .p-title small{display:block; color:#aaa; font-size:7.5pt; letter-spacing:1.5pt; margin-top:3pt;}
+    .p-meta{display:flex; justify-content:space-between; flex-wrap:wrap; gap:6pt; font-size:8.5pt;
+      color:#444; border-bottom:1pt solid #ccc; padding-bottom:8pt; margin-bottom:8pt;}
+    .p-meta b{font-weight:500; color:#111;}
+    .p-sec{font-size:8pt; letter-spacing:1.5pt; font-weight:500; color:#a33; margin:8pt 0 2pt;}
+    .p-row{display:flex; justify-content:space-between; font-size:9.5pt; padding:2.6pt 0;
+      border-bottom:0.5pt solid #eee; break-inside:avoid;}
+    .p-row .pk{color:#333;} .p-row .pv{color:#111;}
+    .p-row.psub{font-size:8pt; color:#777;} .p-row.psub .pk,.p-row.psub .pv{color:#777;}
+    .p-row.credit .pv{color:#1d7a4f;}
+    .p-net{display:flex; justify-content:space-between; align-items:center; background:#141414!important;
+      color:#fff; border-radius:8pt; padding:10pt 16pt; margin-top:10pt;}
+    .p-net .k{font-size:9pt; letter-spacing:2pt; font-weight:500;}
+    .p-net .v{font-size:20pt; font-weight:300;}
+    .p-disc{font-size:6.6pt; color:#777; line-height:1.55; margin-top:10pt; border-top:0.5pt solid #ccc; padding-top:6pt;}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <a class="back" href="/">← RS|LENDING HOME</a>
+  <div class="ticker"><span>AGENT TOOLS</span><span class="line"></span><span>WASHINGTON ACCURATE</span></div>
+  <h1>SELLER<br>NET SHEET</h1>
+  <div class="rule"></div>
+  <p class="sub">Estimate a seller's net proceeds with Washington's graduated excise tax, real Pierce County fees, and every line item editable. Print a clean one-page sheet or share a link.</p>
+
+  <div class="grid">
+    <!-- LEFT: INPUTS -->
+    <div class="card">
+      <div class="eyebrow">THE SALE</div>
+      <div class="field">
+        <label>PROPERTY ADDRESS</label>
+        <div style="display:flex; gap:8px;">
+          <input id="addr" type="text" placeholder="123 Main St, Puyallup WA 98372" style="flex:1;">
+          <button type="button" class="abtn" id="lkBtn" style="flex:none; min-width:0; padding:11px 18px;" onclick="lookup()">LOOK&nbsp;UP</button>
+        </div>
+        <div class="hint" id="lkStatus" style="margin-top:7px;">Enter the full address (with city &amp; ZIP) and hit LOOK UP to auto-fill county data &amp; taxes.</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>SALES PRICE</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="price" type="text" inputmode="decimal" value="600,000"></div>
+        </div>
+        <div class="field">
+          <label>EST. CLOSING DATE</label>
+          <input id="closeDate" type="date">
+        </div>
+      </div>
+      <div class="field">
+        <label>LOCATION (LOCAL EXCISE TAX)</label>
+        <select id="locale">
+          <option value="0.005" selected>Pierce Co. cities & most of WA — 0.50% local</option>
+          <option value="0.0025">Non-GMA area — 0.25% local</option>
+          <option value="0">No local REET</option>
+        </select>
+      </div>
+
+      <div class="eyebrow mt">COMMISSIONS &amp; CONCESSIONS</div>
+      <div class="row2">
+        <div class="field">
+          <div class="lbl-row"><label style="margin:0;">LISTING BROKER</label>
+            <span class="dp-tog"><button type="button" class="tg active" data-t="listPct">%</button><button type="button" class="tg" data-t="listDol">$</button></span></div>
+          <div class="input-wrap"><input id="listC" type="text" inputmode="decimal" value="2.5"><span class="post" id="listU">%</span></div>
+        </div>
+        <div class="field">
+          <div class="lbl-row"><label style="margin:0;">BUYER BROKER</label>
+            <span class="dp-tog"><button type="button" class="tg active" data-t="buyPct">%</button><button type="button" class="tg" data-t="buyDol">$</button></span></div>
+          <div class="input-wrap"><input id="buyC" type="text" inputmode="decimal" value="2.5"><span class="post" id="buyU">%</span></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>OTHER SELLER CONCESSIONS / CREDITS TO BUYER</label>
+        <div class="input-wrap"><span class="pre">$</span><input id="conc" type="text" inputmode="decimal" value="0"></div>
+      </div>
+
+      <div class="eyebrow mt">LOAN PAYOFFS</div>
+      <div class="row2">
+        <div class="field">
+          <label>1ST MORTGAGE PAYOFF</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="pay1" type="text" inputmode="decimal" value="350,000"></div>
+        </div>
+        <div class="field">
+          <label>2ND / HELOC PAYOFF</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="pay2" type="text" inputmode="decimal" value="0"></div>
+        </div>
+      </div>
+
+      <div class="eyebrow mt">PROPERTY TAXES</div>
+      <div class="row2">
+        <div class="field">
+          <label>ANNUAL PROPERTY TAX</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="annTax" type="text" inputmode="decimal" value="5,400"></div>
+        </div>
+        <div class="field">
+          <label>PAID SO FAR THIS YEAR</label>
+          <select id="taxPaid">
+            <option value="0">Nothing yet</option>
+            <option value="0.5" selected>First half (Apr 30)</option>
+            <option value="1">Full year</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="eyebrow mt">TITLE, ESCROW &amp; FEES <span style="color:#6d6d6d; font-size:10px; letter-spacing:1px;">— AUTO-ESTIMATED, EDIT ANY</span></div>
+      <div class="row2">
+        <div class="field">
+          <label>OWNER'S TITLE POLICY</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="title" type="text" inputmode="decimal" data-auto="1"></div>
+        </div>
+        <div class="field">
+          <label>ESCROW FEE (SELLER ½)</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="escrow" type="text" inputmode="decimal" data-auto="1"></div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>WA SALES TAX ON FEES</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="svcTax" type="text" inputmode="decimal" data-auto="1"></div>
+          <div class="hint">~10.3% on title + escrow — commonly missed</div>
+        </div>
+        <div class="field">
+          <label>DEED RECORDING</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="rec" type="text" inputmode="decimal" value="305"></div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>PAYOFF / RECONVEYANCE FEES</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="recon" type="text" inputmode="decimal" data-auto="1"></div>
+          <div class="hint">≈$450 per lien paid off</div>
+        </div>
+        <div class="field">
+          <label>HOA (RESALE CERT / TRANSFER)</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="hoa" type="text" inputmode="decimal" value="0"></div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>SEPTIC INSPECTION (IF APPLIC.)</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="septic" type="text" inputmode="decimal" value="0"></div>
+        </div>
+        <div class="field">
+          <label>HOME WARRANTY / OTHER</label>
+          <div class="input-wrap"><span class="pre">$</span><input id="other" type="text" inputmode="decimal" value="0"></div>
+        </div>
+      </div>
+
+      <div class="eyebrow mt">FOR THE PRINTED SHEET</div>
+      <div class="row2">
+        <div class="field">
+          <label>PREPARED FOR (SELLER)</label>
+          <input id="pFor" type="text" placeholder="Client name">
+        </div>
+        <div class="field">
+          <label>AGENT NAME &amp; PHONE</label>
+          <input id="pAgent" type="text" placeholder="Agent · (253) 555-0100">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: RESULTS -->
+    <div class="card">
+      <div class="eyebrow">ESTIMATED SETTLEMENT</div>
+      <div class="res-rows" id="rows"></div>
+      <div class="net-pill" id="netPill">
+        <span class="lbl">ESTIMATED NET PROCEEDS</span>
+        <span class="num" id="netVal">$0</span>
+      </div>
+      <div class="actions">
+        <button class="abtn" onclick="doPrint()">PRINT / SAVE PDF</button>
+        <button class="abtn ghost" id="shareBtn" onclick="shareLink()">COPY SHARE LINK</button>
+      </div>
+      <div class="qualify">ESTIMATES ONLY — NOT A CLOSING STATEMENT, GUARANTEE, OR COMMITMENT. ACTUAL FIGURES ARE DETERMINED BY YOUR TITLE &amp; ESCROW COMPANY, LENDER PAYOFF STATEMENTS, AND COUNTY RECORDS. EXCISE TAX TIERS CURRENT THROUGH DEC 31, 2026. RS LENDING / MOVEMENT MORTGAGE IS NOT A TITLE OR ESCROW COMPANY.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <img src="assets/RS-Logo-Custom.png" alt="RS Lending — Powered by Movement Mortgage" style="width:250px; max-width:70vw; height:auto; margin-bottom:18px;">
+    <div class="lic">
+      Richard Bigelow · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2092481" target="_blank" rel="noopener">NMLS #2092481</a> · Licensed in WA, AZ, ID, IL &amp; TX<br>
+      Steven Wright · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/201189" target="_blank" rel="noopener">NMLS #201189</a> · Licensed in WA, AZ, KY, MT &amp; TN<br>
+      Movement Mortgage, LLC · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS #39179</a><br>
+      <a href="https://movement.com/legal" target="_blank" rel="noopener">Full legal disclosures &amp; state licensing</a> · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS Consumer Access</a>
+    </div>
+    <div class="disc">INTEREST RATES AND PRODUCTS ARE SUBJECT TO CHANGE WITHOUT NOTICE AND MAY OR MAY NOT BE AVAILABLE AT THE TIME OF LOAN COMMITMENT OR LOCK-IN. BORROWERS MUST QUALIFY AT CLOSING FOR ALL BENEFITS. THIS IS NOT A LOAN COMMITMENT OR AN OFFER OF CREDIT. ALL INFORMATION MUST BE VERIFIED PRIOR TO LOAN APPROVAL.<br>EQUAL HOUSING OPPORTUNITY</div>
+  </div>
+</div>
+
+<!-- PRINT-ONLY SHEET -->
+<div id="printSheet">
+  <div class="p-head">
+    <img src="assets/RS-Logo-Horizontal-Red.png" alt="RS Lending">
+    <div class="p-title">SELLER NET SHEET<small id="ppDate"></small></div>
+  </div>
+  <div class="p-meta">
+    <span>Property: <b id="ppAddr">—</b></span>
+    <span>Prepared for: <b id="ppFor">—</b></span>
+    <span>Agent: <b id="ppAgent">—</b></span>
+    <span>Est. closing: <b id="ppClose">—</b></span>
+  </div>
+  <div id="pRows"></div>
+  <div class="p-net"><span class="k">ESTIMATED NET PROCEEDS</span><span class="v" id="ppNet">$0</span></div>
+  <div class="p-disc" id="ppDisc">
+    ESTIMATES ONLY — not a closing statement, guarantee, or commitment. Actual figures are determined by your title &amp; escrow company, lender payoff statements, and county records. WA excise tax tiers current through Dec 31, 2026. Prepared with tools from RS Lending — Richard Bigelow NMLS #2092481 · Steven Wright NMLS #201189 · Movement Mortgage, LLC NMLS #39179 (nmlsconsumeraccess.org) · movement.com/legal · Equal Housing Opportunity. RS Lending / Movement Mortgage is not a title or escrow company. rslending.co
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const num = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g,"")); return isNaN(n)?0:n; };
+  const fmt$ = n => (n<0?"-$":"$") + Math.abs(Math.round(n)).toLocaleString("en-US");
+  const fmtI = n => Math.round(n).toLocaleString("en-US");
+
+  // WA REET tiers (current through Dec 31, 2026 — thresholds CPI-adjust Jan 1, 2027)
+  const REET_TIERS = [
+    { upTo: 525000,   rate: 0.011  },
+    { upTo: 1525000,  rate: 0.0128 },
+    { upTo: 3025000,  rate: 0.0275 },
+    { upTo: Infinity, rate: 0.03   },
+  ];
+  const TECH_FEE = 5, SVC_TAX_RATE = 0.103;
+
+  function stateReet(price){
+    let tax = 0, prev = 0, parts = [];
+    for (const t of REET_TIERS){
+      if (price <= prev) break;
+      const portion = Math.min(price, t.upTo) - prev;
+      tax += portion * t.rate;
+      parts.push({ portion, rate: t.rate });
+      prev = t.upTo;
+    }
+    return { tax, parts };
+  }
+  function titleEst(p){
+    let v; if (p<=500000) v = 448 + 0.0016*p;
+    else if (p<=1000000) v = 548 + 0.0014*p;
+    else v = 748 + 0.0012*p;
+    return Math.round(v);
+  }
+  function escrowEst(p){
+    let v = p<=1000000 ? 1075 + 0.0005*p : 1575 + (p-1000000)/500000*100;
+    return Math.round(v) + 95;
+  }
+
+  // %/$ toggles for commissions
+  const modes = { list: "pct", buy: "pct" };
+  document.querySelectorAll(".tg").forEach(b=>b.addEventListener("click", ()=>{
+    const t = b.dataset.t, which = t.startsWith("list") ? "list" : "buy";
+    const mode = t.endsWith("Pct") ? "pct" : "dol";
+    if (modes[which] === mode) return;
+    const price = num($("price").value), inp = $(which+"C"), cur = num(inp.value);
+    if (mode === "dol"){ inp.value = fmtI(price*cur/100); } else { inp.value = price>0 ? (Math.round(cur/price*10000)/100).toString() : "2.5"; }
+    modes[which] = mode;
+    $(which+"U").textContent = mode==="pct" ? "%" : "$";
+    b.parentElement.querySelectorAll(".tg").forEach(x=>x.classList.toggle("active", x===b));
+    calc();
+  }));
+
+  const dirty = {};
+  ["title","escrow","svcTax","recon"].forEach(id=>{
+    $(id).addEventListener("input", ()=>{ dirty[id]=true; $(id).classList.add("dirty"); calc(false); });
+  });
+
+  let lastRows = [];
+  function calc(updateAuto = true){
+    const price = num($("price").value);
+    const localRate = parseFloat($("locale").value);
+    const p1 = num($("pay1").value), p2 = num($("pay2").value);
+
+    if (updateAuto){
+      if (!dirty.title)  $("title").value  = fmtI(titleEst(price));
+      if (!dirty.escrow) $("escrow").value = fmtI(escrowEst(price));
+      if (!dirty.svcTax) $("svcTax").value = fmtI((num($("title").value)+num($("escrow").value))*SVC_TAX_RATE);
+      if (!dirty.recon)  $("recon").value  = fmtI(450*((p1>0)+(p2>0)));
+    }
+
+    const listV = modes.list==="pct" ? price*num($("listC").value)/100 : num($("listC").value);
+    const buyV  = modes.buy ==="pct" ? price*num($("buyC").value)/100  : num($("buyC").value);
+    const conc = num($("conc").value);
+
+    const sr = stateReet(price);
+    const localReet = price * localRate;
+    const reetTotal = sr.tax + localReet + TECH_FEE;
+
+    // property tax proration (WA calendar-year)
+    const annTax = num($("annTax").value);
+    const cd = $("closeDate").value ? new Date($("closeDate").value+"T12:00:00") : new Date();
+    const yStart = new Date(cd.getFullYear(),0,1);
+    const yDays = ((cd.getFullYear()%4===0 && cd.getFullYear()%100!==0)||cd.getFullYear()%400===0) ? 366 : 365;
+    const doy = Math.round((cd - yStart)/86400000) + 1;
+    const owed = annTax * doy / yDays;
+    const paid = annTax * parseFloat($("taxPaid").value);
+    const proration = owed - paid; // + = seller owes, − = credit back
+
+    const title=num($("title").value), escrow=num($("escrow").value), svcTax=num($("svcTax").value),
+          rec=num($("rec").value), recon=num($("recon").value), hoa=num($("hoa").value),
+          septic=num($("septic").value), other=num($("other").value);
+
+    const rows = [];
+    const R=(k,v,cls)=>rows.push({k,v,cls});
+    R("SALES PRICE", price, "head");
+    R("Commissions & concessions", listV+buyV+conc, "grp");
+    R("Listing broker" + (modes.list==="pct" ? " ("+num($("listC").value)+"%)" : ""), listV, "sub2");
+    R("Buyer broker" + (modes.buy==="pct" ? " ("+num($("buyC").value)+"%)" : ""), buyV, "sub2");
+    if (conc>0) R("Seller concessions", conc, "sub2");
+    R("Excise tax (REET)", reetTotal, "grp");
+    sr.parts.forEach(pt=>R("State: $"+fmtI(pt.portion)+" @ "+(pt.rate*100).toFixed(2)+"%", pt.portion*pt.rate, "sub2"));
+    if (localRate>0) R("Local REET @ "+(localRate*100).toFixed(2)+"% of full price", localReet, "sub2");
+    R("State tech fee", TECH_FEE, "sub2");
+    R("Title, escrow & fees", title+escrow+svcTax+rec+recon+hoa+septic+other, "grp");
+    R("Owner's title policy", title, "sub2");
+    R("Escrow fee (seller half)", escrow, "sub2");
+    R("WA sales tax on fees", svcTax, "sub2");
+    R("Deed recording", rec, "sub2");
+    if (recon>0) R("Payoff / reconveyance", recon, "sub2");
+    if (hoa>0) R("HOA fees", hoa, "sub2");
+    if (septic>0) R("Septic inspection", septic, "sub2");
+    if (other>0) R("Home warranty / other", other, "sub2");
+    if (proration >= 0) R("Property tax proration (owed)", proration, "grp");
+    else R("Property tax proration (credit)", proration, "credit");
+    R("Loan payoffs", p1+p2, "grp");
+    if (p1>0) R("1st mortgage", p1, "sub2");
+    if (p2>0) R("2nd / HELOC", p2, "sub2");
+
+    const costs = listV+buyV+conc+reetTotal+title+escrow+svcTax+rec+recon+hoa+septic+other+Math.max(proration,0);
+    const credits = Math.max(-proration,0);
+    const net = price - p1 - p2 - costs + credits;
+
+    lastRows = rows;
+    const el = $("rows");
+    el.innerHTML = rows.map(r=>{
+      const cls = r.cls==="head" ? "rrow head" : r.cls==="sub2" ? "rrow sub2" : r.cls==="credit" ? "rrow credit" : "rrow";
+      const sign = (r.cls==="head") ? "" : (r.v<0 ? "+" : "−");
+      return '<div class="'+cls+'"><span class="k">'+r.k+'</span><span class="v">'+(r.cls==="head"?fmt$(r.v):sign+fmt$(Math.abs(r.v)))+'</span></div>';
+    }).join("");
+    $("netVal").textContent = fmt$(net);
+    $("netPill").classList.toggle("neg", net<0);
+    return net;
+  }
+
+  function doPrint(){
+    const net = calc(false);
+    $("ppAddr").textContent = $("addr").value || "—";
+    $("ppFor").textContent = $("pFor").value || "—";
+    $("ppAgent").textContent = $("pAgent").value || "—";
+    $("ppClose").textContent = $("closeDate").value || "—";
+    $("ppDate").textContent = "PREPARED " + new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}).toUpperCase();
+    $("pRows").innerHTML = lastRows.map(r=>{
+      if (r.cls==="head") return '<div class="p-row" style="border-bottom:1pt solid #999;"><span class="pk" style="font-weight:500; letter-spacing:1pt;">'+r.k+'</span><span class="pv" style="font-weight:500;">'+fmt$(r.v)+'</span></div>';
+      if (r.cls==="grp") return '<div class="p-row"><span class="pk" style="font-weight:500;">'+r.k+'</span><span class="pv">−'+fmt$(Math.abs(r.v))+'</span></div>';
+      if (r.cls==="credit") return '<div class="p-row credit"><span class="pk">'+r.k+'</span><span class="pv">+'+fmt$(Math.abs(r.v))+'</span></div>';
+      return '<div class="p-row psub"><span class="pk" style="padding-left:10pt;">'+r.k+'</span><span class="pv">'+fmt$(Math.abs(r.v))+'</span></div>';
+    }).join("");
+    $("ppNet").textContent = fmt$(net);
+    window.print();
+  }
+
+  // ── ADDRESS LOOKUP (county + parcel taxes) ──
+  async function lookup(){
+    const st = $("lkStatus"), addr = $("addr").value.trim();
+    if (addr.length < 8){ st.innerHTML = "Enter a full address first (street, city, ZIP)."; return; }
+    st.innerHTML = "Looking up county &amp; parcel…";
+    $("lkBtn").disabled = true;
+    try{
+      const r = await fetch("/.netlify/functions/parcel?address=" + encodeURIComponent(addr));
+      const d = await r.json();
+      if (d.error === "no_match"){ st.innerHTML = "Address not found — check spelling, city, and ZIP."; return; }
+      if (d.error){ throw new Error(d.error); }
+      let parts = [];
+      const link = d.assessorUrl ? ' · <a href="'+d.assessorUrl+'" target="_blank" rel="noopener" style="color:var(--gold);">Verify on '+d.county+' Co. Assessor →</a>' : "";
+      if (d.parcel && d.parcel.estAnnualTax){
+        $("annTax").value = fmtI(d.parcel.estAnnualTax);
+        parts.push("✓ "+d.county+" County · Parcel "+d.parcel.number+" · taxable value $"+fmtI(d.parcel.taxableValue)+
+          " → est. tax $"+fmtI(d.parcel.estAnnualTax)+" at county avg levy");
+      } else if (d.levyRate){
+        const est = Math.round(num($("price").value) * d.levyRate);
+        $("annTax").value = fmtI(est);
+        parts.push("✓ "+d.county+" County · no parcel layer — tax estimated at "+(d.levyRate*100).toFixed(2)+"% of price");
+      } else {
+        parts.push("✓ "+d.county+" County — enter the annual tax manually");
+      }
+      if (d.matchedAddress) $("addr").value = d.matchedAddress.replace(/, USA$/,"");
+      st.innerHTML = parts.join("") + link;
+      calc();
+    }catch(e){
+      st.innerHTML = "Lookup unavailable right now — enter taxes manually. (Works once deployed to the live site.)";
+    }finally{
+      $("lkBtn").disabled = false;
+    }
+  }
+
+  function shareLink(){
+    const ids=["addr","price","closeDate","listC","buyC","conc","pay1","pay2","annTax","title","escrow","svcTax","rec","recon","hoa","septic","other","pFor","pAgent"];
+    const p = new URLSearchParams();
+    ids.forEach(id=>{ const v=$(id).value; if(v) p.set(id,v); });
+    p.set("locale", $("locale").value); p.set("taxPaid", $("taxPaid").value);
+    p.set("lm", modes.list); p.set("bm", modes.buy);
+    const url = location.origin + location.pathname + "?" + p.toString();
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
+      ()=>{ $("shareBtn").textContent="LINK COPIED ✓"; setTimeout(()=>$("shareBtn").textContent="COPY SHARE LINK",2000); },
+      ()=>{ prompt("Copy this link:", url); });
+  }
+
+  // init
+  (function(){
+    const d = new Date(Date.now()+30*86400000);
+    $("closeDate").value = d.toISOString().slice(0,10);
+    const q = new URLSearchParams(location.search);
+    if ([...q.keys()].length){
+      q.forEach((v,k)=>{
+        if (k==="lm"||k==="bm"){ /* handled below */ }
+        else if ($(k)) $(k).value = v;
+      });
+      ["title","escrow","svcTax","recon"].forEach(id=>{ if(q.has(id)){ dirty[id]=true; $(id).classList.add("dirty"); } });
+      if (q.get("lm")==="dol"){ modes.list="dol"; $("listU").textContent="$"; document.querySelector('[data-t="listDol"]').classList.add("active"); document.querySelector('[data-t="listPct"]').classList.remove("active"); }
+      if (q.get("bm")==="dol"){ modes.buy="dol"; $("buyU").textContent="$"; document.querySelector('[data-t="buyDol"]').classList.add("active"); document.querySelector('[data-t="buyPct"]').classList.remove("active"); }
+    }
+    ["price","closeDate","locale","listC","buyC","conc","pay1","pay2","annTax","taxPaid","rec","hoa","septic","other"].forEach(id=>{
+      $(id).addEventListener("input", ()=>calc());
+      $(id).addEventListener("change", ()=>calc());
+    });
+    ["price","conc","pay1","pay2","annTax","hoa","septic","other"].forEach(id=>{
+      $(id).addEventListener("blur", e=>{ const n=num(e.target.value); if(n) e.target.value=n.toLocaleString("en-US"); });
+    });
+    calc();
+  })();
+</script>
+</body>
+</html>
