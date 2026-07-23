@@ -484,7 +484,7 @@
       if (d.parcel && d.parcel.estAnnualTax){
         $("annTax").value = fmtI(d.parcel.estAnnualTax);
         parts.push("✓ "+d.county+" County · Parcel "+d.parcel.number+" · taxable value $"+fmtI(d.parcel.taxableValue)+
-          " → est. tax $"+fmtI(d.parcel.estAnnualTax)+" at county avg levy");
+          " → est. tax $"+fmtI(d.parcel.estAnnualTax)+(d.parcel.note ? " — "+d.parcel.note : " at county avg levy"));
       } else if (d.levyRate){
         const est = Math.round(num($("price").value) * d.levyRate);
         $("annTax").value = fmtI(est);
