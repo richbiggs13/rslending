@@ -1,10 +1,12 @@
 // Address -> county + parcel data for the seller net sheet.
-// Census geocoder (free, no key) -> county + coords; Pierce & King County
-// public ArcGIS layers -> parcel number + taxable value. Tax estimated as
-// taxable value x county average levy rate (assessor link provided to verify).
+// v2: parcel matched by ADDRESS (not geocode point), Pierce County taxes
+// computed from the official 2026 levy rate for the parcel's Tax Area Code,
+// plus an allowance for non-levy parcel charges (fire benefit, surface water).
+const PIERCE_TCA = require("./pierce_tca.json"); // TCA -> $/1000 (2026 official)
+const PIERCE_NONLEVY = 500; // typical non-levy parcel charges estimate
 
 const COUNTY_INFO = {
-  "Pierce":    { levy: 0.0103, url: "https://atip.piercecountywa.gov/" },
+  "Pierce":    { levy: 0.0105, url: "https://atip.piercecountywa.gov/" },
   "King":      { levy: 0.0085, url: "https://blue.kingcounty.com/Assessor/eRealProperty/default.aspx" },
   "Snohomish": { levy: 0.0095, url: "https://wa-snohomish.publicaccessnow.com/PropertyInformation/PropertySearch.aspx" },
   "Thurston":  { levy: 0.0100, url: "https://tcproperty.co.thurston.wa.us/propsql/front.asp" },
@@ -18,12 +20,24 @@ const UA = { "User-Agent": "RSLendingNetSheet/1.0 (rslending.co)" };
 
 function houseNum(s){ const m = String(s||"").trim().match(/^\d+/); return m ? m[0] : ""; }
 
-async function queryArcgis(url){
-  const res = await fetch(url, { headers: UA });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return (data.features || []);
+// "13502 OVERLOOK DR E, BONNEY LAKE, WA, 98391" -> "13502 OVERLOOK"
+function addrPrefix(matched){
+  const street = String(matched||"").split(",")[0].trim();
+  const parts = street.split(/\s+/);
+  return parts.slice(0, 2).join(" "); // house number + first street word
 }
+
+async function queryArcgis(url){
+  try{
+    const res = await fetch(url, { headers: UA });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.features || [];
+  }catch(e){ return []; }
+}
+
+const PIERCE_BASE = "https://services2.arcgis.com/1UvBaQ5y1ubjUPmd/arcgis/rest/services/Tax_Parcels/FeatureServer/0/query";
+const KING_BASE = "https://services.arcgis.com/Ej0PsM5Aw677QF1W/arcgis/rest/services/PARCEL_ADDRESS_PUB_AREA_3069/FeatureServer/0/query";
 
 exports.handler = async (event) => {
   const headers = {
@@ -35,7 +49,7 @@ exports.handler = async (event) => {
     const address = (event.queryStringParameters || {}).address || "";
     if (address.length < 8) return { statusCode: 400, headers, body: JSON.stringify({ error: "address required" }) };
 
-    // 1) Census geocode -> coords + county (+ city when available)
+    // 1) Census geocode -> matched address + coords + county/city
     const gUrl = "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=" +
       encodeURIComponent(address) +
       "&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties,Incorporated%20Places&format=json";
@@ -45,11 +59,11 @@ exports.handler = async (event) => {
     if (!match) return { statusCode: 200, headers, body: JSON.stringify({ error: "no_match" }) };
 
     const lon = match.coordinates.x, lat = match.coordinates.y;
-    const countyFull = match.geographies?.Counties?.[0]?.NAME || "";
-    const county = countyFull.replace(/ County$/i, "");
+    const county = (match.geographies?.Counties?.[0]?.NAME || "").replace(/ County$/i, "");
     const city = match.geographies?.["Incorporated Places"]?.[0]?.NAME || null;
     const info = COUNTY_INFO[county] || null;
     const hn = houseNum(match.matchedAddress);
+    const prefix = addrPrefix(match.matchedAddress).replace(/'/g, "''");
 
     const out = {
       matchedAddress: match.matchedAddress,
@@ -59,34 +73,49 @@ exports.handler = async (event) => {
       parcel: null,
     };
 
-    // 2) Parcel lookup where we have a working county layer
-    let features = null, addrField = "", valueOf = null, pinField = "";
+    let features = [], addrField = "", pinField = "", valueOf = null, tcaField = null;
     if (county === "Pierce") {
-      const u = "https://services2.arcgis.com/1UvBaQ5y1ubjUPmd/arcgis/rest/services/Tax_Parcels/FeatureServer/0/query" +
-        `?geometry=${lon},${lat}&geometryType=esriGeometryPoint&inSR=4326&distance=15&units=esriSRUnit_Meter` +
-        "&outFields=TaxParcelNumber,Site_Address,Taxable_Value&returnGeometry=false&f=json";
-      features = await queryArcgis(u);
-      addrField = "Site_Address"; pinField = "TaxParcelNumber";
+      addrField = "Site_Address"; pinField = "TaxParcelNumber"; tcaField = "Tax_Area_Code";
       valueOf = a => a.Taxable_Value;
+      const flds = "TaxParcelNumber,Site_Address,Taxable_Value,Tax_Area_Code";
+      // primary: exact address match; fallback: spatial with buffer
+      features = await queryArcgis(PIERCE_BASE + "?where=" + encodeURIComponent(`Site_Address LIKE '${prefix}%'`) +
+        `&outFields=${flds}&returnGeometry=false&f=json`);
+      if (!features.length)
+        features = await queryArcgis(PIERCE_BASE + `?geometry=${lon},${lat}&geometryType=esriGeometryPoint&inSR=4326` +
+          `&distance=15&units=esriSRUnit_Meter&outFields=${flds}&returnGeometry=false&f=json`);
     } else if (county === "King") {
-      const u = "https://services.arcgis.com/Ej0PsM5Aw677QF1W/arcgis/rest/services/PARCEL_ADDRESS_PUB_AREA_3069/FeatureServer/0/query" +
-        `?geometry=${lon},${lat}&geometryType=esriGeometryPoint&inSR=4326&distance=60` +
-        "&outFields=PIN,ADDR_FULL,TAX_LNDVAL,TAX_IMPR&returnGeometry=false&f=json";
-      features = await queryArcgis(u);
       addrField = "ADDR_FULL"; pinField = "PIN";
       valueOf = a => (a.TAX_LNDVAL || 0) + (a.TAX_IMPR || 0);
+      const flds = "PIN,ADDR_FULL,TAX_LNDVAL,TAX_IMPR";
+      features = await queryArcgis(KING_BASE + "?where=" + encodeURIComponent(`ADDR_FULL LIKE '${prefix}%'`) +
+        `&outFields=${flds}&returnGeometry=false&f=json`);
+      if (!features.length)
+        features = await queryArcgis(KING_BASE + `?geometry=${lon},${lat}&geometryType=esriGeometryPoint&inSR=4326` +
+          `&distance=60&outFields=${flds}&returnGeometry=false&f=json`);
     }
 
-    if (features && features.length) {
-      // prefer the feature whose site address starts with the same house number
-      let best = features.find(f => houseNum(f.attributes[addrField]) === hn) || features[0];
+    if (features.length) {
+      const best = features.find(f => houseNum(f.attributes[addrField]) === hn) || features[0];
       const a = best.attributes;
       const taxable = valueOf(a) || 0;
+      let estAnnualTax = null, note = null, tca = tcaField ? String(a[tcaField] || "").trim() : null;
+
+      if (taxable > 0) {
+        if (county === "Pierce" && tca && PIERCE_TCA[tca]) {
+          const rate = PIERCE_TCA[tca];
+          estAnnualTax = Math.round(taxable * rate / 1000 + PIERCE_NONLEVY);
+          note = "2026 levy $" + rate.toFixed(2) + "/1k (tax area " + tca + ") + ~$" + PIERCE_NONLEVY + " est. parcel charges";
+        } else if (info) {
+          estAnnualTax = Math.round(taxable * info.levy);
+          note = "county avg levy estimate";
+        }
+      }
       out.parcel = {
         number: a[pinField] || null,
         siteAddress: a[addrField] || null,
         taxableValue: taxable,
-        estAnnualTax: info && taxable > 0 ? Math.round(taxable * info.levy) : null,
+        estAnnualTax, tca, note,
       };
     }
 
