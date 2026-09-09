@@ -179,6 +179,7 @@
         <div class="field">
           <label>NOTE RATE</label>
           <div class="input-wrap"><input id="rate" type="text" inputmode="decimal" value="6.5"><span class="post">%</span></div>
+          <div id="rateHint" style="color:#6d6d6d; font-size:10.5px; letter-spacing:.5px; margin-top:5px; line-height:1.5;"></div>
         </div>
         <div class="field">
           <label>TERM (YRS)</label>
@@ -479,6 +480,21 @@
   $("price").addEventListener("blur", e=>{ const n=num(e.target.value); if(n) e.target.value=n.toLocaleString("en-US"); });
 
   renderYearInputs(); calc();
+
+  // Auto-current note rate: latest 30-yr conforming national average
+  let rateTouched = false;
+  $("rate").addEventListener("input", ()=>{ rateTouched = true; });
+  fetch("/.netlify/functions/rate?t=" + Math.floor(Date.now()/600000))
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (!d || !d.rate || rateTouched) return;
+      $("rate").value = d.rate.toFixed(3);
+      const dt = new Date(d.asOf + "T12:00:00");
+      $("rateHint").textContent = "Auto-filled with the national avg 30-yr conforming rate as of " +
+        dt.toLocaleDateString("en-US",{month:"short",day:"numeric"}) + " — edit freely.";
+      calc();
+    })
+    .catch(()=>{});
 </script>
 </body>
 </html>
