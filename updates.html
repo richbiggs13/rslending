@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guideline Updates — RS|LENDING</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="description" content="Recent mortgage rule and guideline changes, explained in plain English — departing residence rent, personal property in contracts, and bank statement loans.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#D4A574; --gold-dim:#8A6C4A; --green:#81B795; --green-dim:#30503E;
+    --fg:#ffffff; --muted:#929292; --hairline:#373737; --card:#101010;
+    --bg-center:#161616; --bg-edge:#030303; --red:#C7192D;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Poppins',sans-serif; color:var(--fg);
+    background:radial-gradient(ellipse at 50% 35%, var(--bg-center), var(--bg-edge) 90%);
+    min-height:100vh; padding:48px 20px 80px; -webkit-font-smoothing:antialiased;
+  }
+  .frame{max-width:980px; margin:0 auto; position:relative;}
+  .frame::before,.frame::after,.cm-bl,.cm-br{content:""; position:absolute; width:22px; height:22px; pointer-events:none;}
+  .frame::before{top:-18px; left:-12px; border-top:2px solid #505050; border-left:2px solid #505050;}
+  .frame::after{top:-18px; right:-12px; border-top:2px solid #505050; border-right:2px solid #505050;}
+  .cm-bl{bottom:-18px; left:-12px; border-bottom:2px solid #505050; border-left:2px solid #505050;}
+  .cm-br{bottom:-18px; right:-12px; border-bottom:2px solid #505050; border-right:2px solid #505050;}
+
+  .back{display:inline-block; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:2px; margin-bottom:26px;}
+  .back:hover{color:var(--gold);}
+  .ticker{display:flex; align-items:center; gap:18px; color:var(--muted);
+    font-weight:500; font-size:13px; letter-spacing:3px; margin-bottom:18px;}
+  .ticker .line{flex:1; height:1px; background:var(--hairline);}
+  h1{font-weight:300; font-size:clamp(38px,7vw,72px); letter-spacing:4px; line-height:1.02;}
+  .rule{height:1px; background:var(--gold-dim); margin:22px 0 30px;}
+  .sub{color:var(--muted); font-weight:300; font-size:15px; line-height:1.6; max-width:660px; margin-bottom:28px;}
+  .apply-row{margin:-6px 0 30px;}
+  .apply-btn{display:inline-block; background:var(--gold); color:#111; text-decoration:none; font-weight:500;
+    font-size:13px; letter-spacing:2px; padding:14px 26px; border-radius:999px; transition:transform .15s, background .15s;}
+  .apply-btn:hover{transform:translateY(-2px); background:#e2b98a;}
+
+  .upd{background:var(--card); border:1px solid var(--gold-dim); border-radius:22px; margin-bottom:22px; overflow:hidden;}
+  .upd-head{padding:24px 26px 20px;}
+  .upd-top{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;}
+  .upd-num{color:var(--red); font-weight:700; font-size:26px;}
+  .upd-title{font-weight:500; font-size:clamp(19px,3vw,25px); letter-spacing:.5px;}
+  .chip{display:inline-block; margin-top:10px; padding:5px 13px; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--muted); font-size:11px; letter-spacing:1.5px; font-weight:500;}
+  .takeaway{margin-top:16px; background:#1a1a1a; border-left:3px solid var(--red); border-radius:0 12px 12px 0;
+    padding:14px 18px; font-weight:300; font-size:14.5px; line-height:1.6; color:var(--fg);}
+  .takeaway b{font-weight:500; color:var(--gold);}
+  details{border-top:1px solid var(--hairline);}
+  summary{cursor:pointer; list-style:none; padding:16px 26px; color:var(--gold); font-size:12.5px;
+    letter-spacing:2.5px; font-weight:500; display:flex; align-items:center; gap:10px; transition:background .15s;}
+  summary:hover{background:#161616;}
+  summary::-webkit-details-marker{display:none;}
+  summary .tw{transition:transform .2s; display:inline-block;}
+  details[open] summary .tw{transform:rotate(90deg);}
+  .upd-body{padding:4px 26px 26px;}
+  .pt{display:flex; gap:14px; margin-bottom:16px;}
+  .pt .dot{flex:none; width:26px; height:26px; border-radius:50%; background:var(--red); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; margin-top:2px;}
+  .pt b{display:block; font-weight:500; font-size:15px; margin-bottom:3px;}
+  .pt p{color:var(--muted); font-weight:300; font-size:13.5px; line-height:1.6;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px;}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr;}}
+  .mini{background:#0a0a0a; border:1px solid var(--hairline); border-radius:14px; padding:16px 18px;}
+  .mini h4{color:var(--gold); font-size:11.5px; letter-spacing:2px; font-weight:500; margin-bottom:10px;}
+  .mini li{color:var(--muted); font-weight:300; font-size:13px; line-height:1.7; margin-left:16px;}
+  .src{color:#6d6d6d; font-size:10.5px; letter-spacing:.5px; line-height:1.6; margin-top:16px;}
+
+  .cta{margin-top:34px; text-align:center;}
+  .footer{text-align:center; margin-top:52px;}
+  .lic{color:#828282; font-size:11.5px; letter-spacing:1px; line-height:2; margin-bottom:16px;}
+  .lic a{color:#a8a8a8;}
+  .lic a:hover{color:var(--gold);}
+  .disc{color:#606060; font-size:10px; letter-spacing:1.5px; line-height:1.9; max-width:760px; margin:0 auto;}
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="cm-bl"></span><span class="cm-br"></span>
+
+  <a class="back" href="/">← RS|LENDING HOME</a>
+  <div class="ticker"><span>GUIDELINE UPDATES</span><span class="line"></span><span>WHAT CHANGED &amp; WHY IT MATTERS</span></div>
+  <h1>RULE CHANGES<br>WORTH KNOWING</h1>
+  <div class="rule"></div>
+  <p class="sub">Lending guidelines move constantly — most people never hear about the changes that could help them. Here are the recent ones we're using for real clients, in plain English. Tap any topic to dig into the details.</p>
+  <div class="apply-row"><a class="apply-btn" href="/#apply">START YOUR APPLICATION →</a></div>
+
+  <!-- 01 -->
+  <div class="upd">
+    <div class="upd-head">
+      <div class="upd-top"><span class="upd-num">01</span><span class="upd-title">Departing residence rent — no lease required</span></div>
+      <span class="chip">FANNIE MAE SEL-2026-08 · PUBLISHED SEPT 2, 2026</span>
+      <div class="takeaway"><b>The takeaway:</b> a lease agreement is no longer required to count rent on the home you're leaving behind. Market rent — documented with an appraisal, Form 1007, or third-party rent data — can help you qualify for the next home while keeping the old one.</div>
+    </div>
+    <details>
+      <summary><span class="tw">▸</span> THE FULL DETAILS</summary>
+      <div class="upd-body">
+        <div class="pt"><div class="dot">1</div><div><b>No lease required</b><p>A lease agreement is not permitted for the departing residence scenario — market support replaces it entirely.</p></div></div>
+        <div class="pt"><div class="dot">2</div><div><b>Market-rent support instead</b><p>Document rent with an appraisal showing market rents, Form 1007, or third-party market analysis (Zillow, Redfin, MLS, or similar rent tools) supported by at least 3 comparable rentals.</p></div></div>
+        <div class="pt"><div class="dot">3</div><div><b>How the income is calculated</b><p>Monthly gross market rent × 75%, then subtract the full payment (PITIA). Positive adjusted net rental income may offset that payment only; negative income counts against DTI.</p></div></div>
+        <div class="pt"><div class="dot">4</div><div><b>The reserve rule</b><p>If you have less than 12 months of property-management experience, plan on 6 months of payment reserves for the vacated property.</p></div></div>
+        <div class="grid2">
+          <div class="mini"><h4>WHEN THIS APPLIES</h4><ul>
+            <li>You're vacating a current primary residence</li>
+            <li>The home is converting to an investment property</li>
+            <li>You're purchasing a new primary residence</li></ul></div>
+          <div class="mini"><h4>WHAT CHANGED</h4><ul>
+            <li>Before: lenders often looked to a lease to support rent</li>
+            <li>Now: rent may be supported by market analysis instead</li>
+            <li>Clearer documentation options for departing residences</li></ul></div>
+        </div>
+        <div class="src">Source: Fannie Mae Selling Guide Announcement SEL-2026-08 and Selling Guide Chapter B3-3.8 (published September 2, 2026). Summary only — current agency guidance and applicable overlays control.</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- 02 -->
+  <div class="upd">
+    <div class="upd-head">
+      <div class="upd-top"><span class="upd-num">02</span><span class="upd-title">Personal property can stay in the contract</span></div>
+      <span class="chip">CONVENTIONAL GUIDELINE UPDATE · EFFECTIVE AUG 31, 2026</span>
+      <div class="takeaway"><b>The takeaway:</b> the fridge, the hot tub, the furniture — non-realty items can now remain in the purchase contract without being treated as an inducement to purchase, as long as six conditions are met. No more removing them with an addendum.</div>
+    </div>
+    <details>
+      <summary><span class="tw">▸</span> THE FULL DETAILS</summary>
+      <div class="upd-body">
+        <div class="pt"><div class="dot">✓</div><div><b>What counts as a sales concession</b><p>Sales concessions are interested-party contributions (IPCs) in the form of non-realty items — cash, furniture, automobiles, decorator allowances, moving costs, giveaways, or excess financing concessions.</p></div></div>
+        <div class="grid2">
+          <div class="mini"><h4>THE SIX CONDITIONS — ALL MUST HOLD</h4><ul>
+            <li>Clearly identified in the purchase contract</li>
+            <li>Customary for the local market</li>
+            <li>No contributory value assigned</li></ul></div>
+          <div class="mini"><h4>&nbsp;</h4><ul>
+            <li>Contract says items remain for the seller's convenience</li>
+            <li>Appraiser excludes the items from value and valuation analysis</li>
+            <li>Items don't influence price, marketability, or appraised value</li></ul></div>
+        </div>
+        <div class="grid2" style="margin-top:14px;">
+          <div class="mini"><h4>PREVIOUS GUIDANCE</h4><ul><li>Remove personal property from the contract with an executed addendum</li></ul></div>
+          <div class="mini"><h4>WHAT CHANGED</h4><ul><li>The items can stay in the contract when every condition above is satisfied</li></ul></div>
+        </div>
+        <div class="src">Summary of the conventional IPC guideline update effective August 31, 2026 — current agency guidance and applicable overlays control.</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- 03 -->
+  <div class="upd">
+    <div class="upd-head">
+      <div class="upd-top"><span class="upd-num">03</span><span class="upd-title">Bank statement loans — income, seen differently</span></div>
+      <span class="chip">NON-QM · SELF-EMPLOYED BORROWERS</span>
+      <div class="takeaway"><b>The takeaway:</b> if your tax returns don't reflect your real business cash flow, 12–24 months of bank statements can establish qualifying income instead — and you keep claiming your valid business deductions.</div>
+    </div>
+    <details>
+      <summary><span class="tw">▸</span> THE FULL DETAILS</summary>
+      <div class="upd-body">
+        <div class="pt"><div class="dot">1</div><div><b>How qualification works</b><p>12 or 24 months of statements → eligible deposits are averaged → qualifying income after applicable adjustments.</p></div></div>
+        <div class="pt"><div class="dot">2</div><div><b>Income may qualify higher</b><p>Deposit-based income may exceed the net income shown on your returns.</p></div></div>
+        <div class="pt"><div class="dot">3</div><div><b>Keep valid deductions</b><p>Claim allowable business expenses under the usual tax rules — the loan itself creates no deduction, and tax savings vary.</p></div></div>
+        <div class="pt"><div class="dot">4</div><div><b>More financing paths</b><p>Some programs allow both purchases and refinances.</p></div></div>
+        <div class="src">Program terms and expense adjustments vary; compare total loan costs and ask your tax adviser about deductions. Sources: Angel Oak Mortgage Solutions, Bank Statement Loans; IRS Publication 334 (2025).</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="cta">
+    <a class="apply-btn" href="/#apply">TALK THROUGH YOUR SCENARIO →</a>
+  </div>
+
+  <div class="footer">
+    <img src="assets/RS-Logo-Custom.png" alt="RS Lending — Powered by Movement Mortgage" style="width:250px; max-width:70vw; height:auto; margin-bottom:18px;">
+    <div class="lic">
+      Richard Bigelow · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/2092481" target="_blank" rel="noopener">NMLS #2092481</a> · Licensed in WA, AZ, ID, IL &amp; TX<br>
+      Steven Wright · Branch Leader · <a href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/201189" target="_blank" rel="noopener">NMLS #201189</a> · Licensed in WA, AZ, KY, MT &amp; TN<br>
+      Movement Mortgage, LLC · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS #39179</a><br>
+      <a href="https://movement.com/legal" target="_blank" rel="noopener">Full legal disclosures &amp; state licensing</a> · <a href="https://www.nmlsconsumeraccess.org" target="_blank" rel="noopener">NMLS Consumer Access</a>
+    </div>
+    <div class="disc">EDUCATIONAL SUMMARIES ONLY — GUIDELINES CHANGE AND LENDER OVERLAYS APPLY; CURRENT AGENCY GUIDANCE CONTROLS. INTEREST RATES AND PRODUCTS ARE SUBJECT TO CHANGE WITHOUT NOTICE AND MAY OR MAY NOT BE AVAILABLE AT THE TIME OF LOAN COMMITMENT OR LOCK-IN. BORROWERS MUST QUALIFY AT CLOSING FOR ALL BENEFITS. THIS IS NOT A LOAN COMMITMENT OR AN OFFER OF CREDIT. ALL INFORMATION MUST BE VERIFIED PRIOR TO LOAN APPROVAL.<br>EQUAL HOUSING OPPORTUNITY</div>
+  </div>
+</div>
+</body>
+</html>
